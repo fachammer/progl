@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="css/page.css" />
+    <script type='text/javascript' id='lt_ws' src='http://localhost:2043/socket.io/lighttable/ws.js'></script>
+    <script src="js/cljs.js"></script>
+  </head>
+  <body>
+      <svg id="info-graph">
+          <g id="connections"></g>
+          <g id="nodes"></g>
+          <g id="lables"></g>
+      </svg>
+      <svg id="defs">
+          <marker id="markerArrow" markerWidth="13" markerHeight="13" refx="10" refy="6"
+           orient="auto" markerUnits="userSpaceOnUse">
+              <path d="M2,2 L2,11 L10,6 L2,2"/>
+          </marker>
+      </svg>
+  </body>
+</html>
