@@ -86,7 +86,7 @@
   (keyword
    (if (contains? name->keyword-exceptions string)
      (name->keyword-exceptions string)
-     (-> string (s/replace #"[()]" "") (s/replace #" " "-") (s/lower-case)))))
+     (-> string (s/replace #"[()]" "") (s/replace #"#" "sharp")(s/replace #" " "-") (s/lower-case)))))
 
 (defn language-keywords []
   (apply hash-set (map name->keyword (parse-names))))

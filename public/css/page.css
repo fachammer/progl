@@ -8,19 +8,25 @@ circle, rect {
   stroke-width: 1px;
 }
 
-.active circle, circle:hover {
+.active circle, circle.active, circle:hover {
   fill: grey;
+}
+
+circle, line, text{
+  cursor: pointer;
 }
 
 line {
   stroke: #bbb;
   stroke-width: 1px;
   fill: none;
+  marker-end: url(#markerArrow);
 }
 
 line.active, line:hover {
   stroke: #222;
   stroke-width: 2px;
+  marker-end: url(#markerArrow-active);
 }
 
 text{
@@ -30,17 +36,17 @@ text{
   alignment-baseline: middle;
 }
 
+#markerArrow > path{
+  fill: #bbb;
+}
+
+#markerArrow-active > path{
+  fill: #222;
+}
+
 #defs{
   width: 0;
   height: 0;
-}
-
-#markerArrow > path{
-  fill: #000;
-}
-
-#info-graph{
-
 }
 
 body{

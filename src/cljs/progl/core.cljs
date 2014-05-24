@@ -59,19 +59,19 @@
 
 (defn make-language-node [[index [language-key {{:keys [x y radius]} :svg}]]]
   [:g {:transform  (translate :x x :y y)}
-    [:circle {:id (name language-key) :r radius}]])
+    [:circle {:id (name language-key) :class (name language-key) :r radius}]])
 
 (defn overflow-text [text]
   (if (>= (count text) 11)
     (str (subs text 0 11) "...")
     text))
 
-(defn make-language-label [[index [language-key {{:keys [x y]} :svg name :name appearance-year :appearance-year}]]]
+(defn make-language-label [[index [language-key {{:keys [x y]} :svg language-name :name appearance-year :appearance-year}]]]
   [:g {:transform  (translate :x x :y y)}
-    [:text {:dx 0 :dy 0} (overflow-text name)]])
+    [:text {:dx 0 :dy 0 :class (name language-key)} (overflow-text language-name)]])
 
 (defn make-line [& {:keys [x1 y1 x2 y2 style] :as line}]
-  [:line (assoc line :style (into {:marker-end "url(#markerArrow)"} style))])
+  [:line (assoc line :style style)])
 
 (defn connect-languages [[language1-key language1] [language2-key language2]]
   (let [x1 (:x (:svg language1))
@@ -92,8 +92,12 @@
                  :class css-classes
                  :transform (translate :x x1 :y y1))]))
 
+(connect-languages [:algol-60 (:algol-60 preprocessed-languages)]
+                   [:fortran (:fortran preprocessed-languages)])
+
 (defn make-language-connections [[index [language-key {{:keys [x y]} :svg influenced-by :influenced-by :as language}]]]
-  (map #(connect-languages [language-key language] [% (% preprocessed-languages)]) influenced-by))
+  [:g
+    (map #(connect-languages [language-key language] [% (% preprocessed-languages)]) influenced-by)])
 
 (defn make-all-language-connections []
   (bind! "#connections"
@@ -107,30 +111,45 @@
   (bind! "#lables"
          (unify (map-indexed vector (vec (preprocess-languages l/languages))) make-language-label)))
 
+(defn class-pattern [class-name]
+  (re-pattern (str "(^| )" (name class-name) "($| )")))
+
 (defn add-class! [node class]
-  (dom/attr node :class (str (dom/attr node :class) " " (name class))))
+  (dom/attr node :class (s/trim (str (dom/attr node :class) " " (name class)))))
 
 (defn remove-class! [node class]
-  (dom/attr node :class (s/replace (dom/attr node :class) (re-pattern (str "(^| )" (name class) "($| )")) "")))
+  (dom/attr node :class (s/replace (dom/attr node :class) (class-pattern class) "")))
 
 (defn has-class? [node class]
-  (not (nil? (re-find (re-pattern (str "(^| )" (name class) "($| )")) (dom/attr node :class)))))
+  (not (nil? (re-find (class-pattern class) (dom/attr node :class)))))
 
 (defn toggle-class! [node class]
   (if (has-class? node class)
     (remove-class! node class)
     (add-class! node class)))
 
-(defn on-node-click [[index [language-key language]] node event]
+(defn remove-active! []
+  (doseq [node (dom/select-all ".active")]
+    (remove-class! node :active)))
+
+(defn scroll-centered [x y]
+  (let [screen (.-screen js/window)
+        w (.-availWidth screen)
+        h (.-availHeight screen)]
+    (.scrollTo js/window (- x (/ w 2)) (- y (/ h 2)))))
+
+(defn on-node-click [[index [language-key {{:keys [x y]} :svg}]] node event]
+  (remove-active!)
+  (scroll-centered x y)
   (toggle-class! node :active)
   (doseq [node (dom/select-all (str "." (name language-key)))]
     (toggle-class! node :active)))
 
 (defn on-connection-click [data node event]
-  (toggle-class! node :active)
-  (.log js/console node)
-  (let [line-node ((dom/children ((dom/children node) 0)) 0)]
-    (doseq [language (s/split (dom/attr line-node :class) #" ")]
+  (remove-active!)
+  (let [line-node (.-target event)]
+    (toggle-class! line-node :active)
+    (doseq [language (remove (partial = "active") (s/split (dom/attr line-node :class) #" "))]
       (toggle-class! (dom/select (str "#" language)) :active))))
 
 (defn make-graph! []
@@ -138,6 +157,7 @@
   (make-all-language-nodes)
   (make-all-language-lables)
   (on "#lables" :click on-node-click)
+  ;(on "#lables" :mousein on-label-hover)
   (on "#nodes" :click on-node-click)
   (on "#connections" :click on-connection-click))
 
@@ -145,4 +165,3 @@
   (set! (.-onload js/window) f))
 
 (on-window-load make-graph!)
-

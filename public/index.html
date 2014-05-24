@@ -2,7 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/page.css" />
-    <script type='text/javascript' id='lt_ws' src='http://localhost:2043/socket.io/lighttable/ws.js'></script>
+    <script type='text/javascript' id='lt_ws' src='http://localhost:6911/socket.io/lighttable/ws.js'></script>
     <script src="js/cljs.js"></script>
   </head>
   <body>
@@ -13,6 +13,10 @@
       </svg>
       <svg id="defs">
           <marker id="markerArrow" markerWidth="13" markerHeight="13" refx="10" refy="6"
+           orient="auto" markerUnits="userSpaceOnUse">
+              <path d="M2,2 L2,11 L10,6 L2,2"/>
+          </marker>
+          <marker id="markerArrow-active" markerWidth="13" markerHeight="13" refx="10" refy="6"
            orient="auto" markerUnits="userSpaceOnUse">
               <path d="M2,2 L2,11 L10,6 L2,2"/>
           </marker>
