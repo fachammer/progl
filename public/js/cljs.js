@@ -32398,24 +32398,24 @@ progl.core.pixels = function pixels(value) {
   return[cljs.core.str(value), cljs.core.str("px")].join("");
 };
 progl.core.translate = function() {
-  var translate__delegate = function(p__7520) {
-    var map__7522 = p__7520;
-    var map__7522__$1 = cljs.core.seq_QMARK_.call(null, map__7522) ? cljs.core.apply.call(null, cljs.core.hash_map, map__7522) : map__7522;
-    var y = cljs.core.get.call(null, map__7522__$1, new cljs.core.Keyword(null, "y", "y", 1013904363));
-    var x = cljs.core.get.call(null, map__7522__$1, new cljs.core.Keyword(null, "x", "x", 1013904362));
+  var translate__delegate = function(p__17259) {
+    var map__17261 = p__17259;
+    var map__17261__$1 = cljs.core.seq_QMARK_.call(null, map__17261) ? cljs.core.apply.call(null, cljs.core.hash_map, map__17261) : map__17261;
+    var y = cljs.core.get.call(null, map__17261__$1, new cljs.core.Keyword(null, "y", "y", 1013904363));
+    var x = cljs.core.get.call(null, map__17261__$1, new cljs.core.Keyword(null, "x", "x", 1013904362));
     return[cljs.core.str("translate("), cljs.core.str(x), cljs.core.str(" "), cljs.core.str(y), cljs.core.str(")")].join("");
   };
   var translate = function(var_args) {
-    var p__7520 = null;
+    var p__17259 = null;
     if (arguments.length > 0) {
-      p__7520 = cljs.core.array_seq(Array.prototype.slice.call(arguments, 0), 0);
+      p__17259 = cljs.core.array_seq(Array.prototype.slice.call(arguments, 0), 0);
     }
-    return translate__delegate.call(this, p__7520);
+    return translate__delegate.call(this, p__17259);
   };
   translate.cljs$lang$maxFixedArity = 0;
-  translate.cljs$lang$applyTo = function(arglist__7523) {
-    var p__7520 = cljs.core.seq(arglist__7523);
-    return translate__delegate(p__7520);
+  translate.cljs$lang$applyTo = function(arglist__17262) {
+    var p__17259 = cljs.core.seq(arglist__17262);
+    return translate__delegate(p__17259);
   };
   translate.cljs$core$IFn$_invoke$arity$variadic = translate__delegate;
   return translate;
@@ -32424,61 +32424,61 @@ progl.core.scale = function scale(scale_factor) {
   return[cljs.core.str("scale("), cljs.core.str(scale_factor), cljs.core.str(")")].join("");
 };
 progl.core.calculate_year_intervals = function calculate_year_intervals(min_year, max_year, interval_size) {
-  return cljs.core.map.call(null, function(p1__7524_SHARP_) {
-    return cljs.core.apply.call(null, cljs.core.hash_set, p1__7524_SHARP_);
+  return cljs.core.map.call(null, function(p1__17263_SHARP_) {
+    return cljs.core.apply.call(null, cljs.core.hash_set, p1__17263_SHARP_);
   }, cljs.core.partition_all.call(null, interval_size, cljs.core.range.call(null, min_year, max_year)));
 };
 progl.core.year_intervals = progl.core.calculate_year_intervals.call(null, 1943, 2014, 4);
-progl.core.preprocess_language = function preprocess_language(p__7525) {
-  var vec__7529 = p__7525;
-  var index = cljs.core.nth.call(null, vec__7529, 0, null);
-  var vec__7530 = cljs.core.nth.call(null, vec__7529, 1, null);
-  var language_key = cljs.core.nth.call(null, vec__7530, 0, null);
-  var map__7531 = cljs.core.nth.call(null, vec__7530, 1, null);
-  var map__7531__$1 = cljs.core.seq_QMARK_.call(null, map__7531) ? cljs.core.apply.call(null, cljs.core.hash_map, map__7531) : map__7531;
-  var language = map__7531__$1;
-  var appearance_year = cljs.core.get.call(null, map__7531__$1, new cljs.core.Keyword(null, "appearance-year", "appearance-year", 2753822584));
+progl.core.preprocess_language = function preprocess_language(p__17264) {
+  var vec__17268 = p__17264;
+  var index = cljs.core.nth.call(null, vec__17268, 0, null);
+  var vec__17269 = cljs.core.nth.call(null, vec__17268, 1, null);
+  var language_key = cljs.core.nth.call(null, vec__17269, 0, null);
+  var map__17270 = cljs.core.nth.call(null, vec__17269, 1, null);
+  var map__17270__$1 = cljs.core.seq_QMARK_.call(null, map__17270) ? cljs.core.apply.call(null, cljs.core.hash_map, map__17270) : map__17270;
+  var language = map__17270__$1;
+  var appearance_year = cljs.core.get.call(null, map__17270__$1, new cljs.core.Keyword(null, "appearance-year", "appearance-year", 2753822584));
   return new cljs.core.PersistentArrayMap.fromArray([language_key, function() {
     var window_width = 12E3;
-    return cljs.core.assoc.call(null, language, new cljs.core.Keyword(null, "svg", "svg", 1014018518), new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null, "x", "x", 1013904362), progl.core.pixel_scale.call(null, progl.core.year_scale.call(null, appearance_year), window_width), new cljs.core.Keyword(null, "y", "y", 1013904363), 60 + 50 * index, new cljs.core.Keyword(null, "radius", "radius", 4370292740), 40], null));
+    return cljs.core.assoc.call(null, language, new cljs.core.Keyword(null, "svg", "svg", 1014018518), new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null, "x", "x", 1013904362), progl.core.pixel_scale.call(null, progl.core.year_scale.call(null, appearance_year), window_width), new cljs.core.Keyword(null, "y", "y", 1013904363), 100 + 50 * index, new cljs.core.Keyword(null, "radius", "radius", 4370292740), 40], null));
   }()], true, false);
 };
 progl.core.preprocess_language_year = function preprocess_language_year(language_year_group) {
   return cljs.core.map.call(null, progl.core.preprocess_language, cljs.core.map_indexed.call(null, cljs.core.vector, language_year_group));
 };
 progl.core.year_interval = function year_interval(year) {
-  return cljs.core.flatten.call(null, cljs.core.filter.call(null, function(p1__7532_SHARP_) {
-    return cljs.core.contains_QMARK_.call(null, p1__7532_SHARP_, year);
+  return cljs.core.flatten.call(null, cljs.core.filter.call(null, function(p1__17271_SHARP_) {
+    return cljs.core.contains_QMARK_.call(null, p1__17271_SHARP_, year);
   }, progl.core.year_intervals));
 };
 progl.core.influenced_languages = function influenced_languages(language, languages) {
-  return cljs.core.apply.call(null, cljs.core.hash_set, cljs.core.keys.call(null, cljs.core.filter.call(null, function(p1__7533_SHARP_) {
-    return cljs.core.contains_QMARK_.call(null, (new cljs.core.Keyword(null, "influenced-by", "influenced-by", 3914644039)).cljs$core$IFn$_invoke$arity$1(cljs.core.val.call(null, p1__7533_SHARP_)), language);
+  return cljs.core.apply.call(null, cljs.core.hash_set, cljs.core.keys.call(null, cljs.core.filter.call(null, function(p1__17272_SHARP_) {
+    return cljs.core.contains_QMARK_.call(null, (new cljs.core.Keyword(null, "influenced-by", "influenced-by", 3914644039)).cljs$core$IFn$_invoke$arity$1(cljs.core.val.call(null, p1__17272_SHARP_)), language);
   }, languages)));
 };
 progl.core.filter_languages = function filter_languages(languages) {
-  return cljs.core.filter.call(null, function(p1__7534_SHARP_) {
-    return 1 <= cljs.core.count.call(null, progl.core.influenced_languages.call(null, cljs.core.key.call(null, p1__7534_SHARP_), languages));
+  return cljs.core.filter.call(null, function(p1__17273_SHARP_) {
+    return 1 <= cljs.core.count.call(null, progl.core.influenced_languages.call(null, cljs.core.key.call(null, p1__17273_SHARP_), languages));
   }, languages);
 };
 progl.core.preprocess_languages = function preprocess_languages(languages) {
-  return cljs.core.reduce.call(null, cljs.core.into, cljs.core.flatten.call(null, cljs.core.map.call(null, progl.core.preprocess_language_year, cljs.core.vals.call(null, cljs.core.group_by.call(null, function(p1__7535_SHARP_) {
-    return progl.core.year_interval.call(null, (new cljs.core.Keyword(null, "appearance-year", "appearance-year", 2753822584)).cljs$core$IFn$_invoke$arity$1(cljs.core.val.call(null, p1__7535_SHARP_)));
+  return cljs.core.reduce.call(null, cljs.core.into, cljs.core.flatten.call(null, cljs.core.map.call(null, progl.core.preprocess_language_year, cljs.core.vals.call(null, cljs.core.group_by.call(null, function(p1__17274_SHARP_) {
+    return progl.core.year_interval.call(null, (new cljs.core.Keyword(null, "appearance-year", "appearance-year", 2753822584)).cljs$core$IFn$_invoke$arity$1(cljs.core.val.call(null, p1__17274_SHARP_)));
   }, progl.core.filter_languages.call(null, languages))))));
 };
 progl.core.preprocessed_languages = progl.core.preprocess_languages.call(null, progl.languages.languages);
-progl.core.make_language_node = function make_language_node(p__7536) {
-  var vec__7541 = p__7536;
-  var index = cljs.core.nth.call(null, vec__7541, 0, null);
-  var vec__7542 = cljs.core.nth.call(null, vec__7541, 1, null);
-  var language_key = cljs.core.nth.call(null, vec__7542, 0, null);
-  var map__7543 = cljs.core.nth.call(null, vec__7542, 1, null);
-  var map__7543__$1 = cljs.core.seq_QMARK_.call(null, map__7543) ? cljs.core.apply.call(null, cljs.core.hash_map, map__7543) : map__7543;
-  var map__7544 = cljs.core.get.call(null, map__7543__$1, new cljs.core.Keyword(null, "svg", "svg", 1014018518));
-  var map__7544__$1 = cljs.core.seq_QMARK_.call(null, map__7544) ? cljs.core.apply.call(null, cljs.core.hash_map, map__7544) : map__7544;
-  var radius = cljs.core.get.call(null, map__7544__$1, new cljs.core.Keyword(null, "radius", "radius", 4370292740));
-  var y = cljs.core.get.call(null, map__7544__$1, new cljs.core.Keyword(null, "y", "y", 1013904363));
-  var x = cljs.core.get.call(null, map__7544__$1, new cljs.core.Keyword(null, "x", "x", 1013904362));
+progl.core.make_language_node = function make_language_node(p__17275) {
+  var vec__17280 = p__17275;
+  var index = cljs.core.nth.call(null, vec__17280, 0, null);
+  var vec__17281 = cljs.core.nth.call(null, vec__17280, 1, null);
+  var language_key = cljs.core.nth.call(null, vec__17281, 0, null);
+  var map__17282 = cljs.core.nth.call(null, vec__17281, 1, null);
+  var map__17282__$1 = cljs.core.seq_QMARK_.call(null, map__17282) ? cljs.core.apply.call(null, cljs.core.hash_map, map__17282) : map__17282;
+  var map__17283 = cljs.core.get.call(null, map__17282__$1, new cljs.core.Keyword(null, "svg", "svg", 1014018518));
+  var map__17283__$1 = cljs.core.seq_QMARK_.call(null, map__17283) ? cljs.core.apply.call(null, cljs.core.hash_map, map__17283) : map__17283;
+  var radius = cljs.core.get.call(null, map__17283__$1, new cljs.core.Keyword(null, "radius", "radius", 4370292740));
+  var y = cljs.core.get.call(null, map__17283__$1, new cljs.core.Keyword(null, "y", "y", 1013904363));
+  var x = cljs.core.get.call(null, map__17283__$1, new cljs.core.Keyword(null, "x", "x", 1013904362));
   return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "g", "g", 1013904345), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "transform", "transform", 2066570974), progl.core.translate.call(null, new cljs.core.Keyword(null, "x", "x", 1013904362), x, new cljs.core.Keyword(null, "y", "y", 1013904363), y)], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, 
   "circle", "circle", 3948654658), new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null, "id", "id", 1013907597), cljs.core.name.call(null, language_key), new cljs.core.Keyword(null, "class", "class", 1108647146), cljs.core.name.call(null, language_key), new cljs.core.Keyword(null, "r", "r", 1013904356), radius], null)], null)], null);
 };
@@ -32489,56 +32489,56 @@ progl.core.overflow_text = function overflow_text(text) {
     return text;
   }
 };
-progl.core.make_language_label = function make_language_label(p__7545) {
-  var vec__7550 = p__7545;
-  var index = cljs.core.nth.call(null, vec__7550, 0, null);
-  var vec__7551 = cljs.core.nth.call(null, vec__7550, 1, null);
-  var language_key = cljs.core.nth.call(null, vec__7551, 0, null);
-  var map__7552 = cljs.core.nth.call(null, vec__7551, 1, null);
-  var map__7552__$1 = cljs.core.seq_QMARK_.call(null, map__7552) ? cljs.core.apply.call(null, cljs.core.hash_map, map__7552) : map__7552;
-  var map__7553 = cljs.core.get.call(null, map__7552__$1, new cljs.core.Keyword(null, "svg", "svg", 1014018518));
-  var map__7553__$1 = cljs.core.seq_QMARK_.call(null, map__7553) ? cljs.core.apply.call(null, cljs.core.hash_map, map__7553) : map__7553;
-  var y = cljs.core.get.call(null, map__7553__$1, new cljs.core.Keyword(null, "y", "y", 1013904363));
-  var x = cljs.core.get.call(null, map__7553__$1, new cljs.core.Keyword(null, "x", "x", 1013904362));
-  var language_name = cljs.core.get.call(null, map__7552__$1, new cljs.core.Keyword(null, "name", "name", 1017277949));
-  var appearance_year = cljs.core.get.call(null, map__7552__$1, new cljs.core.Keyword(null, "appearance-year", "appearance-year", 2753822584));
+progl.core.make_language_label = function make_language_label(p__17284) {
+  var vec__17289 = p__17284;
+  var index = cljs.core.nth.call(null, vec__17289, 0, null);
+  var vec__17290 = cljs.core.nth.call(null, vec__17289, 1, null);
+  var language_key = cljs.core.nth.call(null, vec__17290, 0, null);
+  var map__17291 = cljs.core.nth.call(null, vec__17290, 1, null);
+  var map__17291__$1 = cljs.core.seq_QMARK_.call(null, map__17291) ? cljs.core.apply.call(null, cljs.core.hash_map, map__17291) : map__17291;
+  var map__17292 = cljs.core.get.call(null, map__17291__$1, new cljs.core.Keyword(null, "svg", "svg", 1014018518));
+  var map__17292__$1 = cljs.core.seq_QMARK_.call(null, map__17292) ? cljs.core.apply.call(null, cljs.core.hash_map, map__17292) : map__17292;
+  var y = cljs.core.get.call(null, map__17292__$1, new cljs.core.Keyword(null, "y", "y", 1013904363));
+  var x = cljs.core.get.call(null, map__17292__$1, new cljs.core.Keyword(null, "x", "x", 1013904362));
+  var language_name = cljs.core.get.call(null, map__17291__$1, new cljs.core.Keyword(null, "name", "name", 1017277949));
+  var appearance_year = cljs.core.get.call(null, map__17291__$1, new cljs.core.Keyword(null, "appearance-year", "appearance-year", 2753822584));
   return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "g", "g", 1013904345), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "transform", "transform", 2066570974), progl.core.translate.call(null, new cljs.core.Keyword(null, "x", "x", 1013904362), x, new cljs.core.Keyword(null, "y", "y", 1013904363), y)], null), new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, 
   "text", "text", 1017460895), new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null, "dx", "dx", 1013907462), 0, new cljs.core.Keyword(null, "dy", "dy", 1013907463), 0, new cljs.core.Keyword(null, "class", "class", 1108647146), cljs.core.name.call(null, language_key)], null), progl.core.overflow_text.call(null, language_name)], null)], null);
 };
 progl.core.make_line = function() {
-  var make_line__delegate = function(p__7554) {
-    var map__7556 = p__7554;
-    var map__7556__$1 = cljs.core.seq_QMARK_.call(null, map__7556) ? cljs.core.apply.call(null, cljs.core.hash_map, map__7556) : map__7556;
-    var line = map__7556__$1;
-    var style = cljs.core.get.call(null, map__7556__$1, new cljs.core.Keyword(null, "style", "style", 1123684643));
-    var y2 = cljs.core.get.call(null, map__7556__$1, new cljs.core.Keyword(null, "y2", "y2", 1013908043));
-    var x2 = cljs.core.get.call(null, map__7556__$1, new cljs.core.Keyword(null, "x2", "x2", 1013908012));
-    var y1 = cljs.core.get.call(null, map__7556__$1, new cljs.core.Keyword(null, "y1", "y1", 1013908042));
-    var x1 = cljs.core.get.call(null, map__7556__$1, new cljs.core.Keyword(null, "x1", "x1", 1013908011));
+  var make_line__delegate = function(p__17293) {
+    var map__17295 = p__17293;
+    var map__17295__$1 = cljs.core.seq_QMARK_.call(null, map__17295) ? cljs.core.apply.call(null, cljs.core.hash_map, map__17295) : map__17295;
+    var line = map__17295__$1;
+    var style = cljs.core.get.call(null, map__17295__$1, new cljs.core.Keyword(null, "style", "style", 1123684643));
+    var y2 = cljs.core.get.call(null, map__17295__$1, new cljs.core.Keyword(null, "y2", "y2", 1013908043));
+    var x2 = cljs.core.get.call(null, map__17295__$1, new cljs.core.Keyword(null, "x2", "x2", 1013908012));
+    var y1 = cljs.core.get.call(null, map__17295__$1, new cljs.core.Keyword(null, "y1", "y1", 1013908042));
+    var x1 = cljs.core.get.call(null, map__17295__$1, new cljs.core.Keyword(null, "x1", "x1", 1013908011));
     return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "line", "line", 1017226086), cljs.core.assoc.call(null, line, new cljs.core.Keyword(null, "style", "style", 1123684643), style)], null);
   };
   var make_line = function(var_args) {
-    var p__7554 = null;
+    var p__17293 = null;
     if (arguments.length > 0) {
-      p__7554 = cljs.core.array_seq(Array.prototype.slice.call(arguments, 0), 0);
+      p__17293 = cljs.core.array_seq(Array.prototype.slice.call(arguments, 0), 0);
     }
-    return make_line__delegate.call(this, p__7554);
+    return make_line__delegate.call(this, p__17293);
   };
   make_line.cljs$lang$maxFixedArity = 0;
-  make_line.cljs$lang$applyTo = function(arglist__7557) {
-    var p__7554 = cljs.core.seq(arglist__7557);
-    return make_line__delegate(p__7554);
+  make_line.cljs$lang$applyTo = function(arglist__17296) {
+    var p__17293 = cljs.core.seq(arglist__17296);
+    return make_line__delegate(p__17293);
   };
   make_line.cljs$core$IFn$_invoke$arity$variadic = make_line__delegate;
   return make_line;
 }();
-progl.core.connect_languages = function connect_languages(p__7558, p__7559) {
-  var vec__7562 = p__7558;
-  var language1_key = cljs.core.nth.call(null, vec__7562, 0, null);
-  var language1 = cljs.core.nth.call(null, vec__7562, 1, null);
-  var vec__7563 = p__7559;
-  var language2_key = cljs.core.nth.call(null, vec__7563, 0, null);
-  var language2 = cljs.core.nth.call(null, vec__7563, 1, null);
+progl.core.connect_languages = function connect_languages(p__17297, p__17298) {
+  var vec__17301 = p__17297;
+  var language1_key = cljs.core.nth.call(null, vec__17301, 0, null);
+  var language1 = cljs.core.nth.call(null, vec__17301, 1, null);
+  var vec__17302 = p__17298;
+  var language2_key = cljs.core.nth.call(null, vec__17302, 0, null);
+  var language2 = cljs.core.nth.call(null, vec__17302, 1, null);
   var x1 = (new cljs.core.Keyword(null, "x", "x", 1013904362)).cljs$core$IFn$_invoke$arity$1((new cljs.core.Keyword(null, "svg", "svg", 1014018518)).cljs$core$IFn$_invoke$arity$1(language1));
   var y1 = (new cljs.core.Keyword(null, "y", "y", 1013904363)).cljs$core$IFn$_invoke$arity$1((new cljs.core.Keyword(null, "svg", "svg", 1014018518)).cljs$core$IFn$_invoke$arity$1(language1));
   var x2 = (new cljs.core.Keyword(null, "x", "x", 1013904362)).cljs$core$IFn$_invoke$arity$1((new cljs.core.Keyword(null, "svg", "svg", 1014018518)).cljs$core$IFn$_invoke$arity$1(language2));
@@ -32552,29 +32552,27 @@ progl.core.connect_languages = function connect_languages(p__7558, p__7559) {
   return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "g", "g", 1013904345), progl.core.make_line.call(null, new cljs.core.Keyword(null, "x1", "x1", 1013908011), dx, new cljs.core.Keyword(null, "y1", "y1", 1013908042), dy, new cljs.core.Keyword(null, "x2", "x2", 1013908012), -(r1 * c2.maths.cos.call(null, line_angle)), new cljs.core.Keyword(null, "y2", "y2", 1013908043), -(r1 * c2.maths.sin.call(null, line_angle)), new cljs.core.Keyword(null, 
   "class", "class", 1108647146), css_classes, new cljs.core.Keyword(null, "transform", "transform", 2066570974), progl.core.translate.call(null, new cljs.core.Keyword(null, "x", "x", 1013904362), x1, new cljs.core.Keyword(null, "y", "y", 1013904363), y1))], null);
 };
-progl.core.connect_languages.call(null, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "algol-60", "algol-60", 2683507712), (new cljs.core.Keyword(null, "algol-60", "algol-60", 2683507712)).cljs$core$IFn$_invoke$arity$1(progl.core.preprocessed_languages)], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "fortran", "fortran", 4631652070), (new cljs.core.Keyword(null, 
-"fortran", "fortran", 4631652070)).cljs$core$IFn$_invoke$arity$1(progl.core.preprocessed_languages)], null));
-progl.core.make_language_connections = function make_language_connections(p__7565) {
-  var vec__7570 = p__7565;
-  var index = cljs.core.nth.call(null, vec__7570, 0, null);
-  var vec__7571 = cljs.core.nth.call(null, vec__7570, 1, null);
-  var language_key = cljs.core.nth.call(null, vec__7571, 0, null);
-  var map__7572 = cljs.core.nth.call(null, vec__7571, 1, null);
-  var map__7572__$1 = cljs.core.seq_QMARK_.call(null, map__7572) ? cljs.core.apply.call(null, cljs.core.hash_map, map__7572) : map__7572;
-  var language = map__7572__$1;
-  var map__7573 = cljs.core.get.call(null, map__7572__$1, new cljs.core.Keyword(null, "svg", "svg", 1014018518));
-  var map__7573__$1 = cljs.core.seq_QMARK_.call(null, map__7573) ? cljs.core.apply.call(null, cljs.core.hash_map, map__7573) : map__7573;
-  var y = cljs.core.get.call(null, map__7573__$1, new cljs.core.Keyword(null, "y", "y", 1013904363));
-  var x = cljs.core.get.call(null, map__7573__$1, new cljs.core.Keyword(null, "x", "x", 1013904362));
-  var influenced_by = cljs.core.get.call(null, map__7572__$1, new cljs.core.Keyword(null, "influenced-by", "influenced-by", 3914644039));
-  return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "g", "g", 1013904345), cljs.core.map.call(null, function(p1__7564_SHARP_) {
-    return progl.core.connect_languages.call(null, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [language_key, language], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [p1__7564_SHARP_, p1__7564_SHARP_.call(null, progl.core.preprocessed_languages)], null));
+progl.core.make_language_connections = function make_language_connections(p__17304) {
+  var vec__17309 = p__17304;
+  var index = cljs.core.nth.call(null, vec__17309, 0, null);
+  var vec__17310 = cljs.core.nth.call(null, vec__17309, 1, null);
+  var language_key = cljs.core.nth.call(null, vec__17310, 0, null);
+  var map__17311 = cljs.core.nth.call(null, vec__17310, 1, null);
+  var map__17311__$1 = cljs.core.seq_QMARK_.call(null, map__17311) ? cljs.core.apply.call(null, cljs.core.hash_map, map__17311) : map__17311;
+  var language = map__17311__$1;
+  var map__17312 = cljs.core.get.call(null, map__17311__$1, new cljs.core.Keyword(null, "svg", "svg", 1014018518));
+  var map__17312__$1 = cljs.core.seq_QMARK_.call(null, map__17312) ? cljs.core.apply.call(null, cljs.core.hash_map, map__17312) : map__17312;
+  var y = cljs.core.get.call(null, map__17312__$1, new cljs.core.Keyword(null, "y", "y", 1013904363));
+  var x = cljs.core.get.call(null, map__17312__$1, new cljs.core.Keyword(null, "x", "x", 1013904362));
+  var influenced_by = cljs.core.get.call(null, map__17311__$1, new cljs.core.Keyword(null, "influenced-by", "influenced-by", 3914644039));
+  return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "g", "g", 1013904345), cljs.core.map.call(null, function(p1__17303_SHARP_) {
+    return progl.core.connect_languages.call(null, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [language_key, language], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [p1__17303_SHARP_, p1__17303_SHARP_.call(null, progl.core.preprocessed_languages)], null));
   }, influenced_by)], null);
 };
-progl.core.make_all_language_connections = function make_all_language_connections() {
+progl.core.make_all_language_connections = function make_all_language_connections(langs) {
   var co__4427__auto__ = function() {
     var co__4372__auto__ = new reflex.core.ComputedObservable(null, true, function() {
-      return c2.core.unify.call(null, cljs.core.map_indexed.call(null, cljs.core.vector, cljs.core.vec.call(null, progl.core.preprocess_languages.call(null, progl.languages.languages))), progl.core.make_language_connections);
+      return c2.core.unify.call(null, cljs.core.map_indexed.call(null, cljs.core.vector, cljs.core.vec.call(null, cljs.core.deref.call(null, langs))), progl.core.make_language_connections);
     }, cljs.core.gensym.call(null, "computed-observable"), cljs.core.PersistentArrayMap.EMPTY, cljs.core.PersistentArrayMap.EMPTY);
     cljs.core.deref.call(null, co__4372__auto__);
     return co__4372__auto__;
@@ -32586,10 +32584,10 @@ progl.core.make_all_language_connections = function make_all_language_connection
   });
   return co__4427__auto__;
 };
-progl.core.make_all_language_nodes = function make_all_language_nodes() {
+progl.core.make_all_language_nodes = function make_all_language_nodes(langs) {
   var co__4427__auto__ = function() {
     var co__4372__auto__ = new reflex.core.ComputedObservable(null, true, function() {
-      return c2.core.unify.call(null, cljs.core.map_indexed.call(null, cljs.core.vector, cljs.core.vec.call(null, progl.core.preprocess_languages.call(null, progl.languages.languages))), progl.core.make_language_node);
+      return c2.core.unify.call(null, cljs.core.map_indexed.call(null, cljs.core.vector, cljs.core.vec.call(null, cljs.core.deref.call(null, langs))), progl.core.make_language_node);
     }, cljs.core.gensym.call(null, "computed-observable"), cljs.core.PersistentArrayMap.EMPTY, cljs.core.PersistentArrayMap.EMPTY);
     cljs.core.deref.call(null, co__4372__auto__);
     return co__4372__auto__;
@@ -32601,10 +32599,10 @@ progl.core.make_all_language_nodes = function make_all_language_nodes() {
   });
   return co__4427__auto__;
 };
-progl.core.make_all_language_lables = function make_all_language_lables() {
+progl.core.make_all_language_lables = function make_all_language_lables(langs) {
   var co__4427__auto__ = function() {
     var co__4372__auto__ = new reflex.core.ComputedObservable(null, true, function() {
-      return c2.core.unify.call(null, cljs.core.map_indexed.call(null, cljs.core.vector, cljs.core.vec.call(null, progl.core.preprocess_languages.call(null, progl.languages.languages))), progl.core.make_language_label);
+      return c2.core.unify.call(null, cljs.core.map_indexed.call(null, cljs.core.vector, cljs.core.vec.call(null, cljs.core.deref.call(null, langs))), progl.core.make_language_label);
     }, cljs.core.gensym.call(null, "computed-observable"), cljs.core.PersistentArrayMap.EMPTY, cljs.core.PersistentArrayMap.EMPTY);
     cljs.core.deref.call(null, co__4372__auto__);
     return co__4372__auto__;
@@ -32619,14 +32617,22 @@ progl.core.make_all_language_lables = function make_all_language_lables() {
 progl.core.class_pattern = function class_pattern(class_name) {
   return cljs.core.re_pattern.call(null, [cljs.core.str("(^| )"), cljs.core.str(cljs.core.name.call(null, class_name)), cljs.core.str("($| )")].join(""));
 };
-progl.core.add_class_BANG_ = function add_class_BANG_(node, class$) {
-  return c2.dom.attr.call(null, node, new cljs.core.Keyword(null, "class", "class", 1108647146), clojure.string.trim.call(null, [cljs.core.str(c2.dom.attr.call(null, node, new cljs.core.Keyword(null, "class", "class", 1108647146))), cljs.core.str(" "), cljs.core.str(cljs.core.name.call(null, class$))].join("")));
-};
-progl.core.remove_class_BANG_ = function remove_class_BANG_(node, class$) {
-  return c2.dom.attr.call(null, node, new cljs.core.Keyword(null, "class", "class", 1108647146), clojure.string.replace.call(null, c2.dom.attr.call(null, node, new cljs.core.Keyword(null, "class", "class", 1108647146)), progl.core.class_pattern.call(null, class$), ""));
-};
 progl.core.has_class_QMARK_ = function has_class_QMARK_(node, class$) {
   return!(cljs.core.re_find.call(null, progl.core.class_pattern.call(null, class$), c2.dom.attr.call(null, node, new cljs.core.Keyword(null, "class", "class", 1108647146))) == null);
+};
+progl.core.add_class_BANG_ = function add_class_BANG_(node, class$) {
+  if (progl.core.has_class_QMARK_.call(null, node, class$)) {
+    return null;
+  } else {
+    return c2.dom.attr.call(null, node, new cljs.core.Keyword(null, "class", "class", 1108647146), clojure.string.trim.call(null, [cljs.core.str(c2.dom.attr.call(null, node, new cljs.core.Keyword(null, "class", "class", 1108647146))), cljs.core.str(" "), cljs.core.str(cljs.core.name.call(null, class$))].join("")));
+  }
+};
+progl.core.remove_class_BANG_ = function remove_class_BANG_(node, class$) {
+  if (progl.core.has_class_QMARK_.call(null, node, class$)) {
+    return c2.dom.attr.call(null, node, new cljs.core.Keyword(null, "class", "class", 1108647146), clojure.string.replace.call(null, c2.dom.attr.call(null, node, new cljs.core.Keyword(null, "class", "class", 1108647146)), progl.core.class_pattern.call(null, class$), ""));
+  } else {
+    return null;
+  }
 };
 progl.core.toggle_class_BANG_ = function toggle_class_BANG_(node, class$) {
   if (progl.core.has_class_QMARK_.call(null, node, class$)) {
@@ -32636,49 +32642,49 @@ progl.core.toggle_class_BANG_ = function toggle_class_BANG_(node, class$) {
   }
 };
 progl.core.remove_active_BANG_ = function remove_active_BANG_() {
-  var seq__7578 = cljs.core.seq.call(null, c2.dom.select_all.call(null, ".active"));
-  var chunk__7579 = null;
-  var count__7580 = 0;
-  var i__7581 = 0;
+  var seq__17317 = cljs.core.seq.call(null, c2.dom.select_all.call(null, ".active"));
+  var chunk__17318 = null;
+  var count__17319 = 0;
+  var i__17320 = 0;
   while (true) {
-    if (i__7581 < count__7580) {
-      var node = cljs.core._nth.call(null, chunk__7579, i__7581);
+    if (i__17320 < count__17319) {
+      var node = cljs.core._nth.call(null, chunk__17318, i__17320);
       progl.core.remove_class_BANG_.call(null, node, new cljs.core.Keyword(null, "active", "active", 3885920888));
-      var G__7582 = seq__7578;
-      var G__7583 = chunk__7579;
-      var G__7584 = count__7580;
-      var G__7585 = i__7581 + 1;
-      seq__7578 = G__7582;
-      chunk__7579 = G__7583;
-      count__7580 = G__7584;
-      i__7581 = G__7585;
+      var G__17321 = seq__17317;
+      var G__17322 = chunk__17318;
+      var G__17323 = count__17319;
+      var G__17324 = i__17320 + 1;
+      seq__17317 = G__17321;
+      chunk__17318 = G__17322;
+      count__17319 = G__17323;
+      i__17320 = G__17324;
       continue;
     } else {
-      var temp__4092__auto__ = cljs.core.seq.call(null, seq__7578);
+      var temp__4092__auto__ = cljs.core.seq.call(null, seq__17317);
       if (temp__4092__auto__) {
-        var seq__7578__$1 = temp__4092__auto__;
-        if (cljs.core.chunked_seq_QMARK_.call(null, seq__7578__$1)) {
-          var c__4191__auto__ = cljs.core.chunk_first.call(null, seq__7578__$1);
-          var G__7586 = cljs.core.chunk_rest.call(null, seq__7578__$1);
-          var G__7587 = c__4191__auto__;
-          var G__7588 = cljs.core.count.call(null, c__4191__auto__);
-          var G__7589 = 0;
-          seq__7578 = G__7586;
-          chunk__7579 = G__7587;
-          count__7580 = G__7588;
-          i__7581 = G__7589;
+        var seq__17317__$1 = temp__4092__auto__;
+        if (cljs.core.chunked_seq_QMARK_.call(null, seq__17317__$1)) {
+          var c__4191__auto__ = cljs.core.chunk_first.call(null, seq__17317__$1);
+          var G__17325 = cljs.core.chunk_rest.call(null, seq__17317__$1);
+          var G__17326 = c__4191__auto__;
+          var G__17327 = cljs.core.count.call(null, c__4191__auto__);
+          var G__17328 = 0;
+          seq__17317 = G__17325;
+          chunk__17318 = G__17326;
+          count__17319 = G__17327;
+          i__17320 = G__17328;
           continue;
         } else {
-          var node = cljs.core.first.call(null, seq__7578__$1);
+          var node = cljs.core.first.call(null, seq__17317__$1);
           progl.core.remove_class_BANG_.call(null, node, new cljs.core.Keyword(null, "active", "active", 3885920888));
-          var G__7590 = cljs.core.next.call(null, seq__7578__$1);
-          var G__7591 = null;
-          var G__7592 = 0;
-          var G__7593 = 0;
-          seq__7578 = G__7590;
-          chunk__7579 = G__7591;
-          count__7580 = G__7592;
-          i__7581 = G__7593;
+          var G__17329 = cljs.core.next.call(null, seq__17317__$1);
+          var G__17330 = null;
+          var G__17331 = 0;
+          var G__17332 = 0;
+          seq__17317 = G__17329;
+          chunk__17318 = G__17330;
+          count__17319 = G__17331;
+          i__17320 = G__17332;
           continue;
         }
       } else {
@@ -32688,69 +32694,56 @@ progl.core.remove_active_BANG_ = function remove_active_BANG_() {
     break;
   }
 };
-progl.core.scroll_centered = function scroll_centered(x, y) {
+progl.core.scroll_centered_BANG_ = function scroll_centered_BANG_(x, y) {
   var screen = window.screen;
   var w = screen.availWidth;
   var h = screen.availHeight;
-  return window.scrollTo(x - w / 2, y - h / 2);
+  return scrollTo(x - w / 2, y - h / 2);
 };
-progl.core.on_node_click = function on_node_click(p__7594, node, event) {
-  var vec__7603 = p__7594;
-  var index = cljs.core.nth.call(null, vec__7603, 0, null);
-  var vec__7604 = cljs.core.nth.call(null, vec__7603, 1, null);
-  var language_key = cljs.core.nth.call(null, vec__7604, 0, null);
-  var map__7605 = cljs.core.nth.call(null, vec__7604, 1, null);
-  var map__7605__$1 = cljs.core.seq_QMARK_.call(null, map__7605) ? cljs.core.apply.call(null, cljs.core.hash_map, map__7605) : map__7605;
-  var map__7606 = cljs.core.get.call(null, map__7605__$1, new cljs.core.Keyword(null, "svg", "svg", 1014018518));
-  var map__7606__$1 = cljs.core.seq_QMARK_.call(null, map__7606) ? cljs.core.apply.call(null, cljs.core.hash_map, map__7606) : map__7606;
-  var y = cljs.core.get.call(null, map__7606__$1, new cljs.core.Keyword(null, "y", "y", 1013904363));
-  var x = cljs.core.get.call(null, map__7606__$1, new cljs.core.Keyword(null, "x", "x", 1013904362));
-  progl.core.remove_active_BANG_.call(null);
-  progl.core.scroll_centered.call(null, x, y);
-  progl.core.toggle_class_BANG_.call(null, node, new cljs.core.Keyword(null, "active", "active", 3885920888));
-  var seq__7607 = cljs.core.seq.call(null, c2.dom.select_all.call(null, [cljs.core.str("."), cljs.core.str(cljs.core.name.call(null, language_key))].join("")));
-  var chunk__7608 = null;
-  var count__7609 = 0;
-  var i__7610 = 0;
+progl.core.activate_language_BANG_ = function activate_language_BANG_(lang_key) {
+  var seq__17337 = cljs.core.seq.call(null, c2.dom.select_all.call(null, [cljs.core.str("."), cljs.core.str(cljs.core.name.call(null, lang_key))].join("")));
+  var chunk__17338 = null;
+  var count__17339 = 0;
+  var i__17340 = 0;
   while (true) {
-    if (i__7610 < count__7609) {
-      var node__$1 = cljs.core._nth.call(null, chunk__7608, i__7610);
-      progl.core.toggle_class_BANG_.call(null, node__$1, new cljs.core.Keyword(null, "active", "active", 3885920888));
-      var G__7611 = seq__7607;
-      var G__7612 = chunk__7608;
-      var G__7613 = count__7609;
-      var G__7614 = i__7610 + 1;
-      seq__7607 = G__7611;
-      chunk__7608 = G__7612;
-      count__7609 = G__7613;
-      i__7610 = G__7614;
+    if (i__17340 < count__17339) {
+      var node = cljs.core._nth.call(null, chunk__17338, i__17340);
+      progl.core.add_class_BANG_.call(null, node, new cljs.core.Keyword(null, "active", "active", 3885920888));
+      var G__17341 = seq__17337;
+      var G__17342 = chunk__17338;
+      var G__17343 = count__17339;
+      var G__17344 = i__17340 + 1;
+      seq__17337 = G__17341;
+      chunk__17338 = G__17342;
+      count__17339 = G__17343;
+      i__17340 = G__17344;
       continue;
     } else {
-      var temp__4092__auto__ = cljs.core.seq.call(null, seq__7607);
+      var temp__4092__auto__ = cljs.core.seq.call(null, seq__17337);
       if (temp__4092__auto__) {
-        var seq__7607__$1 = temp__4092__auto__;
-        if (cljs.core.chunked_seq_QMARK_.call(null, seq__7607__$1)) {
-          var c__4191__auto__ = cljs.core.chunk_first.call(null, seq__7607__$1);
-          var G__7615 = cljs.core.chunk_rest.call(null, seq__7607__$1);
-          var G__7616 = c__4191__auto__;
-          var G__7617 = cljs.core.count.call(null, c__4191__auto__);
-          var G__7618 = 0;
-          seq__7607 = G__7615;
-          chunk__7608 = G__7616;
-          count__7609 = G__7617;
-          i__7610 = G__7618;
+        var seq__17337__$1 = temp__4092__auto__;
+        if (cljs.core.chunked_seq_QMARK_.call(null, seq__17337__$1)) {
+          var c__4191__auto__ = cljs.core.chunk_first.call(null, seq__17337__$1);
+          var G__17345 = cljs.core.chunk_rest.call(null, seq__17337__$1);
+          var G__17346 = c__4191__auto__;
+          var G__17347 = cljs.core.count.call(null, c__4191__auto__);
+          var G__17348 = 0;
+          seq__17337 = G__17345;
+          chunk__17338 = G__17346;
+          count__17339 = G__17347;
+          i__17340 = G__17348;
           continue;
         } else {
-          var node__$1 = cljs.core.first.call(null, seq__7607__$1);
-          progl.core.toggle_class_BANG_.call(null, node__$1, new cljs.core.Keyword(null, "active", "active", 3885920888));
-          var G__7619 = cljs.core.next.call(null, seq__7607__$1);
-          var G__7620 = null;
-          var G__7621 = 0;
-          var G__7622 = 0;
-          seq__7607 = G__7619;
-          chunk__7608 = G__7620;
-          count__7609 = G__7621;
-          i__7610 = G__7622;
+          var node = cljs.core.first.call(null, seq__17337__$1);
+          progl.core.add_class_BANG_.call(null, node, new cljs.core.Keyword(null, "active", "active", 3885920888));
+          var G__17349 = cljs.core.next.call(null, seq__17337__$1);
+          var G__17350 = null;
+          var G__17351 = 0;
+          var G__17352 = 0;
+          seq__17337 = G__17349;
+          chunk__17338 = G__17350;
+          count__17339 = G__17351;
+          i__17340 = G__17352;
           continue;
         }
       } else {
@@ -32759,54 +32752,69 @@ progl.core.on_node_click = function on_node_click(p__7594, node, event) {
     }
     break;
   }
+};
+progl.core.on_node_click = function on_node_click(p__17353, node, event) {
+  var vec__17358 = p__17353;
+  var index = cljs.core.nth.call(null, vec__17358, 0, null);
+  var vec__17359 = cljs.core.nth.call(null, vec__17358, 1, null);
+  var lang_key = cljs.core.nth.call(null, vec__17359, 0, null);
+  var map__17360 = cljs.core.nth.call(null, vec__17359, 1, null);
+  var map__17360__$1 = cljs.core.seq_QMARK_.call(null, map__17360) ? cljs.core.apply.call(null, cljs.core.hash_map, map__17360) : map__17360;
+  var map__17361 = cljs.core.get.call(null, map__17360__$1, new cljs.core.Keyword(null, "svg", "svg", 1014018518));
+  var map__17361__$1 = cljs.core.seq_QMARK_.call(null, map__17361) ? cljs.core.apply.call(null, cljs.core.hash_map, map__17361) : map__17361;
+  var y = cljs.core.get.call(null, map__17361__$1, new cljs.core.Keyword(null, "y", "y", 1013904363));
+  var x = cljs.core.get.call(null, map__17361__$1, new cljs.core.Keyword(null, "x", "x", 1013904362));
+  progl.core.remove_active_BANG_.call(null);
+  progl.core.scroll_centered_BANG_.call(null, x, y);
+  return progl.core.activate_language_BANG_.call(null, lang_key);
 };
 progl.core.on_connection_click = function on_connection_click(data, node, event) {
   progl.core.remove_active_BANG_.call(null);
   var line_node = event.target;
   progl.core.toggle_class_BANG_.call(null, line_node, new cljs.core.Keyword(null, "active", "active", 3885920888));
-  var seq__7627 = cljs.core.seq.call(null, cljs.core.remove.call(null, cljs.core.partial.call(null, cljs.core._EQ_, "active"), clojure.string.split.call(null, c2.dom.attr.call(null, line_node, new cljs.core.Keyword(null, "class", "class", 1108647146)), / /)));
-  var chunk__7628 = null;
-  var count__7629 = 0;
-  var i__7630 = 0;
+  var seq__17366 = cljs.core.seq.call(null, cljs.core.remove.call(null, cljs.core.partial.call(null, cljs.core._EQ_, "active"), clojure.string.split.call(null, c2.dom.attr.call(null, line_node, new cljs.core.Keyword(null, "class", "class", 1108647146)), / /)));
+  var chunk__17367 = null;
+  var count__17368 = 0;
+  var i__17369 = 0;
   while (true) {
-    if (i__7630 < count__7629) {
-      var language = cljs.core._nth.call(null, chunk__7628, i__7630);
+    if (i__17369 < count__17368) {
+      var language = cljs.core._nth.call(null, chunk__17367, i__17369);
       progl.core.toggle_class_BANG_.call(null, c2.dom.select.call(null, [cljs.core.str("#"), cljs.core.str(language)].join("")), new cljs.core.Keyword(null, "active", "active", 3885920888));
-      var G__7631 = seq__7627;
-      var G__7632 = chunk__7628;
-      var G__7633 = count__7629;
-      var G__7634 = i__7630 + 1;
-      seq__7627 = G__7631;
-      chunk__7628 = G__7632;
-      count__7629 = G__7633;
-      i__7630 = G__7634;
+      var G__17370 = seq__17366;
+      var G__17371 = chunk__17367;
+      var G__17372 = count__17368;
+      var G__17373 = i__17369 + 1;
+      seq__17366 = G__17370;
+      chunk__17367 = G__17371;
+      count__17368 = G__17372;
+      i__17369 = G__17373;
       continue;
     } else {
-      var temp__4092__auto__ = cljs.core.seq.call(null, seq__7627);
+      var temp__4092__auto__ = cljs.core.seq.call(null, seq__17366);
       if (temp__4092__auto__) {
-        var seq__7627__$1 = temp__4092__auto__;
-        if (cljs.core.chunked_seq_QMARK_.call(null, seq__7627__$1)) {
-          var c__4191__auto__ = cljs.core.chunk_first.call(null, seq__7627__$1);
-          var G__7635 = cljs.core.chunk_rest.call(null, seq__7627__$1);
-          var G__7636 = c__4191__auto__;
-          var G__7637 = cljs.core.count.call(null, c__4191__auto__);
-          var G__7638 = 0;
-          seq__7627 = G__7635;
-          chunk__7628 = G__7636;
-          count__7629 = G__7637;
-          i__7630 = G__7638;
+        var seq__17366__$1 = temp__4092__auto__;
+        if (cljs.core.chunked_seq_QMARK_.call(null, seq__17366__$1)) {
+          var c__4191__auto__ = cljs.core.chunk_first.call(null, seq__17366__$1);
+          var G__17374 = cljs.core.chunk_rest.call(null, seq__17366__$1);
+          var G__17375 = c__4191__auto__;
+          var G__17376 = cljs.core.count.call(null, c__4191__auto__);
+          var G__17377 = 0;
+          seq__17366 = G__17374;
+          chunk__17367 = G__17375;
+          count__17368 = G__17376;
+          i__17369 = G__17377;
           continue;
         } else {
-          var language = cljs.core.first.call(null, seq__7627__$1);
+          var language = cljs.core.first.call(null, seq__17366__$1);
           progl.core.toggle_class_BANG_.call(null, c2.dom.select.call(null, [cljs.core.str("#"), cljs.core.str(language)].join("")), new cljs.core.Keyword(null, "active", "active", 3885920888));
-          var G__7639 = cljs.core.next.call(null, seq__7627__$1);
-          var G__7640 = null;
-          var G__7641 = 0;
-          var G__7642 = 0;
-          seq__7627 = G__7639;
-          chunk__7628 = G__7640;
-          count__7629 = G__7641;
-          i__7630 = G__7642;
+          var G__17378 = cljs.core.next.call(null, seq__17366__$1);
+          var G__17379 = null;
+          var G__17380 = 0;
+          var G__17381 = 0;
+          seq__17366 = G__17378;
+          chunk__17367 = G__17379;
+          count__17368 = G__17380;
+          i__17369 = G__17381;
           continue;
         }
       } else {
@@ -32816,15 +32824,49 @@ progl.core.on_connection_click = function on_connection_click(data, node, event)
     break;
   }
 };
-progl.core.make_graph_BANG_ = function make_graph_BANG_() {
-  progl.core.make_all_language_connections.call(null);
-  progl.core.make_all_language_nodes.call(null);
-  progl.core.make_all_language_lables.call(null);
+progl.core.make_graph_BANG_ = function make_graph_BANG_(langs) {
+  progl.core.make_all_language_connections.call(null, langs);
+  progl.core.make_all_language_nodes.call(null, langs);
+  progl.core.make_all_language_lables.call(null, langs);
   c2.event.on.call(null, "#lables", new cljs.core.Keyword(null, "click", "click", 1108654330), progl.core.on_node_click);
   c2.event.on.call(null, "#nodes", new cljs.core.Keyword(null, "click", "click", 1108654330), progl.core.on_node_click);
   return c2.event.on.call(null, "#connections", new cljs.core.Keyword(null, "click", "click", 1108654330), progl.core.on_connection_click);
 };
+progl.core.lower_case = function lower_case(s) {
+  return s.toLowerCase();
+};
+progl.core.string_contains_QMARK_ = function string_contains_QMARK_(string, s) {
+  return cljs.core.not_EQ_.call(null, -1, string.indexOf(s));
+};
+progl.core.contains_lang_name_QMARK_ = function contains_lang_name_QMARK_(lang, lang_name) {
+  return progl.core.string_contains_QMARK_.call(null, progl.core.lower_case.call(null, (new cljs.core.Keyword(null, "name", "name", 1017277949)).cljs$core$IFn$_invoke$arity$1(lang)), lang_name);
+};
+progl.core.find_langs_with_name = function find_langs_with_name(langs, lang_name) {
+  return cljs.core.filter.call(null, function(p1__17382_SHARP_) {
+    return progl.core.contains_lang_name_QMARK_.call(null, cljs.core.val.call(null, p1__17382_SHARP_), lang_name);
+  }, langs);
+};
+progl.core.shown_languages = cljs.core.atom.call(null, progl.core.preprocessed_languages);
+progl.core.on_search_input = function on_search_input(event) {
+  cljs.core.swap_BANG_.call(null, progl.core.shown_languages, function(cur_langs) {
+    return progl.core.find_langs_with_name.call(null, progl.core.preprocessed_languages, event.target.value);
+  });
+  var first_lang = cljs.core.first.call(null, cljs.core.deref.call(null, progl.core.shown_languages));
+  var x = (new cljs.core.Keyword(null, "x", "x", 1013904362)).cljs$core$IFn$_invoke$arity$1((new cljs.core.Keyword(null, "svg", "svg", 1014018518)).cljs$core$IFn$_invoke$arity$1(cljs.core.val.call(null, first_lang)));
+  var y = (new cljs.core.Keyword(null, "y", "y", 1013904363)).cljs$core$IFn$_invoke$arity$1((new cljs.core.Keyword(null, "svg", "svg", 1014018518)).cljs$core$IFn$_invoke$arity$1(cljs.core.val.call(null, first_lang)));
+  progl.core.scroll_centered_BANG_.call(null, x, y);
+  return progl.core.activate_language_BANG_.call(null, cljs.core.key.call(null, first_lang));
+};
+progl.core.on_node_input = function on_node_input(node, f) {
+  return node.oninput = f;
+};
+progl.core.setup_search_handlers_BANG_ = function setup_search_handlers_BANG_() {
+  return progl.core.on_node_input.call(null, c2.dom.select.call(null, "#search"), progl.core.on_search_input);
+};
 progl.core.on_window_load = function on_window_load(f) {
   return window.onload = f;
 };
-progl.core.on_window_load.call(null, progl.core.make_graph_BANG_);
+progl.core.on_window_load.call(null, function() {
+  progl.core.make_graph_BANG_.call(null, progl.core.shown_languages);
+  return progl.core.setup_search_handlers_BANG_.call(null);
+});

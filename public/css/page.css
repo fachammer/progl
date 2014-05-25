@@ -30,10 +30,13 @@ line.active, line:hover {
 }
 
 text{
-  font-size: 8pt;
+  font-size: 7pt;
   fill: black;
   text-anchor: middle;
   alignment-baseline: middle;
+  font-family: Arial, sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 #markerArrow > path{
@@ -53,4 +56,11 @@ body{
   width: 12200px;
   height: 7000px;
   overflow: scroll;
+}
+
+input {
+  position: fixed;
+  margin: 10px;
+  border: none;
+  border-bottom: 1px solid black;
 }
