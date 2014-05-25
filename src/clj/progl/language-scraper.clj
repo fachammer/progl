@@ -2,52 +2,70 @@
   (:require [net.cgrand.enlive-html :as html]
             [clojure.string :as s]))
 
+(def url-prefix "http://en.wikipedia.org")
+(def tl-article "/wiki/Timeline_of_programming_languages")
+
+(defn wiki-url [path]
+  (str url-prefix path))
+
 (defn fetch-url [url]
   (html/html-resource (java.net.URL. url)))
 
-(defn fetch-actual-timeline []
-  (fetch-url "http://en.wikipedia.org/wiki/Timeline_of_programming_languages"))
+(defn fetch-wiki-article [path]
+  (fetch-url (wiki-url path)))
 
-(def tl (fetch-actual-timeline))
+(def raw-tl (fetch-wiki-article tl-article))
 
-(defn fetch-timeline [] tl)
+(defn select-wikitable [markup]
+  (html/select markup [:table.wikitable]))
 
-(defn select-rows []
-  (html/select (fetch-timeline) [:table.wikitable :tr]))
+(defn select-rows [markup]
+  (html/select markup [:tr]))
 
-(defn select-years []
-  (html/select (select-rows) [[:td (html/nth-child 1)]]))
+(defn td-childs [rows n]
+  (html/select rows [[:td (html/nth-child n)]]))
 
-(defn select-names []
-  (html/select (select-rows) [[:td (html/nth-child 2)]]))
+(def col-key->child-number {:years 1
+                            :names 2
+                            :creators 3
+                            :predecessors 4})
 
-(defn select-creators []
-  (html/select (select-rows) [[:td (html/nth-child 3)]]))
+(defn select [col-key rows]
+  (td-childs rows (col-key col-key->child-number)))
 
-(defn select-predecessors []
-  (html/select (select-rows) [[:td (html/nth-child 4)]]))
+(defn select-texts [col-key rows]
+  (html/texts (select col-key rows)))
 
-(defn scrape-records []
-  (map (fn [year name creators predecessors]
-         { :appearance-year year
-           :name name
-           :creators creators
-           :influenced-by predecessors}) (html/texts (select-years))
-                                         (html/texts (select-names))
-                                         (html/texts (select-creators))
-                                         (html/texts (select-predecessors))))
+(defn select-years [rows]
+  (select-texts :years rows))
 
-(defn column [col-key]
-  (map col-key (scrape-records)))
+(defn select-names [rows]
+  (select-texts :names rows))
 
-(defn parse-years []
-  (map #(read-string (subs % 0 4)) (column :appearance-year)))
+(defn select-creators [rows]
+  (select-texts :creators rows))
 
-(defn parse-names []
-  (map #(s/replace % #" \(.*\).*$" "") (column :name)))
+(defn select-predecessors [rows]
+  (select-texts :predecessors rows))
 
-(defn parse-creators []
-  (map #(apply hash-set (map s/trim (s/split % #","))) (column :creators)))
+(defn select-url [{:keys [content]}]
+  (html/select content [[:a (html/but (html/attr-ends :title " (page does not exist)"))]]))
+
+(defn get-href [content]
+  (when-let [url (select-url content)]
+    (-> url first :attrs :href)))
+
+(defn select-urls [rows]
+  (map get-href (select :names rows)))
+
+(defn parse-years [years]
+  (map #(read-string (subs % 0 4)) years))
+
+(defn parse-names [names]
+  (map #(s/replace % #" \(.*\).*$" "") names))
+
+(defn parse-creators [creators]
+  (map #(apply hash-set (map s/trim (s/split % #","))) creators))
 
 (def name->keyword-exceptions {"SQL aka structured query language" :sql
                                "GOM – Good Old Mad" :gom
@@ -88,40 +106,95 @@
      (name->keyword-exceptions string)
      (-> string (s/replace #"[()]" "") (s/replace #"#" "sharp")(s/replace #" " "-") (s/lower-case)))))
 
-(defn language-keywords []
-  (apply hash-set (map name->keyword (parse-names))))
+(defn language-keywords [names]
+  (apply hash-set (map name->keyword names)))
 
-(def language-keywords (language-keywords))
+(def language-keywords (apply hash-set (->> raw-tl select-rows select-names parse-names (map name->keyword))))
 
 (defn language-exists? [language-key]
   (contains? language-keywords language-key))
 
-(defn parse-predecessors []
+(defn parse-predecessors [predecessors]
   (map #(cond (or (= % "*") (= % "")) #{}
               :else (apply hash-set (filter language-exists? (map name->keyword (map s/trim (s/split % #","))))))
-       (column :influenced-by)))
+       predecessors))
 
-(defn make-map-entry [year name creators predecessors]
-  {(name->keyword name){:appearance-year year
-                        :name name
+(defn lang-map-entry [year lang-name creators predecessors url]
+  {(name->keyword lang-name){:appearance-year year
+                        :name lang-name
                         :creators creators
-                        :influenced-by predecessors}})
+                        :influenced-by predecessors
+                        :url url}})
 
-(defn timeline []
-  (reduce into (map make-map-entry (parse-years) (parse-names) (parse-creators) (parse-predecessors))))
-
-(defn languages-with-nonexistent-predecessor []
-  (let [tl (timeline)]
-    (sort (filter (fn [timeline-entry] (some #(not (contains? tl %)) (:influenced-by (val timeline-entry)))) tl))))
-
-(defn nonexistent-predecessors []
-  (let [tl (timeline)]
-    (filter #(not (contains? tl %)) (reduce into (map #(:influenced-by (val %)) tl)))))
-
-(timeline)
+(defn timeline [rows]
+  (apply merge (map lang-map-entry
+                    (->> rows select-years parse-years)
+                    (->> rows select-names parse-names)
+                    (->> rows select-creators parse-creators)
+                    (->> rows select-predecessors parse-predecessors)
+                    (->> rows select-urls))))
 
 
+(defn languages-with-nonexistent-predecessor [tl]
+  (sort (filter (fn [timeline-entry] (some #(not (contains? tl %)) (:influenced-by (val timeline-entry)))) tl)))
 
+(defn nonexistent-predecessors [tl]
+  (filter #(not (contains? tl %)) (reduce into (map #(:influenced-by (val %)) tl))))
 
+(defn progl-timeline []
+  (-> (fetch-wiki-article tl-article) select-wikitable select-rows timeline))
+
+(defn select-infobox [markup]
+  (html/select markup [:table.infobox]))
+
+(defn select-table-heads [table]
+  (html/select table [:th]))
+
+(defn text-equals [text]
+  #(= (html/text %) text))
+
+(defn select-table-cell [table cell-title]
+  (apply str (html/texts
+              (html/select table [[:td (html/left
+                                        [[:th (html/pred (text-equals cell-title))]])]]))))
+
+(defn select-paradigms [table]
+  (select-table-cell table "Paradigm(s)"))
+
+(defn select-influenced-by [table]
+  (select-table-cell table "Influenced by"))
+
+(def paradigm->keyword-exceptions {"Objectoriented" :object-oriented
+                                   "Object-oriented-class-based" :object-oriented
+                                   "Class-based-object-oriented" :object-oriented
+                                   "Class-based" :object-oriented})
+
+(defn paradigm->keyword [paradigm]
+  (if (contains? paradigm->keyword-exceptions paradigm)
+    (paradigm->keyword-exceptions paradigm)
+    (name->keyword paradigm)))
+
+(defn parse-paradigms [paradigms]
+  (apply hash-set (map paradigm->keyword (-> paradigms
+                                             (s/trim)
+                                             (s/replace #"\n|\[.*\]|([mM]ulti[- ]?[pP]aradigm:? ?)" "")
+                                             (s/split #"(, )|(\n)| and ")))))
+
+(defn parse-influenced-by [influenced-by]
+  (apply hash-set (map name->keyword (-> influenced-by
+                                         (s/trim)
+                                         (s/replace #"\n|\[.*\]|\)" "")
+                                         (s/split #"(, )|(\n)| and | \(")))))
+
+(parse-influenced-by (select-influenced-by (select-infobox (fetch-wiki-article "/wiki/C_(programming_language)"))))
+
+(defn get-language-data [wiki-article]
+  (-> (fetch-wiki-article wiki-article) select-infobox select-paradigms parse-paradigms))
+
+(def raw-lang-data (apply merge (pmap (fn [[lang-key {:keys [url]}]] {lang-key (select-infobox (fetch-wiki-article url))}) (progl-timeline))))
+
+raw-lang-data
+
+(map #(-> % select-influenced-by parse-influenced-by) (vals raw-lang-data))
 
 
