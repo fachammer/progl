@@ -4,12 +4,12 @@
 
 circle, rect {
   fill: white;
-  stroke: black;
+  stroke: #222;
   stroke-width: 1px;
 }
 
 .active circle, circle.active, circle:hover {
-  fill: grey;
+  fill: #bbb;
 }
 
 circle, line, text{
@@ -25,11 +25,11 @@ line {
 
 line.active, line:hover {
   stroke: #222;
-  stroke-width: 2px;
+  stroke-width: 4px;
   marker-end: url(#markerArrow-active);
 }
 
-text{
+text, label, li{
   font-size: 7pt;
   fill: black;
   text-anchor: middle;
@@ -47,20 +47,62 @@ text{
   fill: #222;
 }
 
+body{
+  overflow: hidden;
+}
+
 #defs{
   width: 0;
   height: 0;
 }
 
-body{
-  width: 12200px;
-  height: 7000px;
-  overflow: scroll;
+#search-form {
+  position: fixed;
+  background: white;
+  width: 25%;
+  height: 100%;
+}
+
+#search{
+  width: 70%;
+  padding: 0;
+  padding-bottom: 2px;
 }
 
 input {
-  position: fixed;
   margin: 10px;
   border: none;
   border-bottom: 1px solid black;
+}
+
+input:focus {
+  outline: 0;
+}
+
+#search-area{
+  height: 5%;
+}
+
+#lang-list {
+  position: relative;
+  overflow-y: scroll;
+  list-style-type: none;
+  height: 95%;
+  padding: 0;
+}
+
+#lang-list li {
+  font-size: 10pt;
+  font-weight: normal;
+  text-transform: none;
+  padding: 10px 13px;
+  cursor: pointer;
+}
+
+#lang-list li:hover {
+  background-color: #ddd;
+}
+
+#lang-list li.active {
+  background-color: #aaa;
 }

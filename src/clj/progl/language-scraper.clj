@@ -98,7 +98,12 @@
                                "Standard C" :c
                                "Smalltalk-80" :smalltalk
                                "Boehm" :boehm-unnamed-coding-system
-                               "Turbo Pascal" :pascal})
+                               "Turbo Pascal" :pascal
+                               "C++" :cpp
+                               "Standard C++" :standard-cpp
+                               "Ada ISO 8652:1987" :ada-iso-8652})
+
+
 
 (defn name->keyword [string]
   (keyword

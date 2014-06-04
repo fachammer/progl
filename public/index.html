@@ -1,25 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
     <link rel="stylesheet" href="css/page.css" />
-    <script type='text/javascript' id='lt_ws' src='http://localhost:16650/socket.io/lighttable/ws.js'></script>
+      <script type='text/javascript' id='lt_ws' src='http://localhost:50046/socket.io/lighttable/ws.js'></script>
     <script src="js/cljs.js"></script>
   </head>
   <body>
       <form id="search-form">
-          <input id="search" type="text" placeholder="search"/>
+          <div id="search-area">
+              <input id="search" type="text" placeholder="Search"/>
+              <label id="matches">0 languages</label>
+          </div>
+          <ul id="lang-list"></ul>
       </form>
       <svg id="info-graph">
-          <g id="connections"></g>
-          <g id="nodes"></g>
-          <g id="lables"></g>
+          <g id="viewport">
+              <g id="connections"></g>
+              <g id="nodes"></g>
+              <g id="lables"></g>
+          </g>
       </svg>
       <svg id="defs">
           <marker id="markerArrow" markerWidth="13" markerHeight="13" refx="10" refy="6"
            orient="auto" markerUnits="userSpaceOnUse">
               <path d="M2,2 L2,11 L10,6 L2,2"/>
           </marker>
-          <marker id="markerArrow-active" markerWidth="13" markerHeight="13" refx="10" refy="6"
+          <marker id="markerArrow-active" markerWidth="20" markerHeight="20" refx="10" refy="6"
            orient="auto" markerUnits="userSpaceOnUse">
               <path d="M2,2 L2,11 L10,6 L2,2"/>
           </marker>

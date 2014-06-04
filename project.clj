@@ -20,7 +20,8 @@
       :main {
         :source-paths ["src/cljs"]
         :compiler {:output-to "public/js/cljs.js"
-                   :pretty-print true}
+                   :pretty-print true
+                   :libs ["lib/closure/svgpan.js"]}
         :jar true}}}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]

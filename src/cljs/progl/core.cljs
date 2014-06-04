@@ -4,9 +4,10 @@
             [c2.scale :as scale]
             [c2.dom :as dom]
             [c2.maths :as math]
-            [clojure.string :as s])
-  (:use [c2.core :only [unify]]
-        [c2.event :only [on]]))
+            [clojure.string :as s]
+            [c2.core :refer [unify]]
+            [c2.event :refer [on]]
+            [svgpan.SvgPan :as svgpan]))
 
 (defn year-scale [value]
   (int ((scale/linear :domain [1942 2014]
@@ -37,7 +38,7 @@
   {language-key
     (let [window-width 12000]
       (assoc language :svg {:x (pixel-scale (year-scale appearance-year) window-width)
-                            :y (+ 100 (* 50 index))
+                            :y (+ 100 (* 300 index))
                             :radius 40}))})
 
 (defn preprocess-language-year [language-year-group]
@@ -50,10 +51,10 @@
   (apply hash-set (keys (filter #(contains? (:influenced-by (val %)) language) languages))))
 
 (defn filter-languages [languages]
-  (filter #(<= 1 (count (influenced-languages (key %) languages))) languages))
+  (filter #(<= 0 (count (influenced-languages (key %) languages))) languages))
 
 (defn preprocess-languages [languages]
-  (reduce into (flatten (map preprocess-language-year (vals (group-by #(year-interval (:appearance-year (val %))) (filter-languages languages)))))))
+  (apply merge (flatten (map preprocess-language-year (vals (group-by #(year-interval (:appearance-year (val %))) (filter-languages languages)))))))
 
 (def preprocessed-languages (preprocess-languages l/languages))
 
@@ -92,9 +93,11 @@
                  :class css-classes
                  :transform (translate :x x1 :y y1))]))
 
+(def shown-languages (atom preprocessed-languages))
+
 (defn make-language-connections [[index [language-key {{:keys [x y]} :svg influenced-by :influenced-by :as language}]]]
   [:g
-    (map #(connect-languages [language-key language] [% (% preprocessed-languages)]) influenced-by)])
+    (map #(connect-languages [language-key language] [% (% preprocessed-languages)]) (filter (partial contains? @shown-languages) influenced-by))])
 
 (defn make-all-language-connections [langs]
   (bind! "#connections"
@@ -141,10 +144,12 @@
   (doseq [node (dom/select-all (str "." (name lang-key)))]
     (add-class! node :active)))
 
-(defn on-node-click [[index [lang-key {{:keys [x y]} :svg}]] node event]
-  (remove-active!)
-  (scroll-centered! x y)
-  (activate-language! lang-key))
+(declare handle-search-input)
+
+(defn on-node-click [[index [lang-key {{:keys [x y]} :svg lang-name :name}]] node event]
+  (let [search-term (str "\"" lang-name "\"")]
+    (set! (.-value (dom/select "#search")) search-term)
+    (handle-search-input search-term)))
 
 (defn on-connection-click [data node event]
   (remove-active!)
@@ -167,21 +172,40 @@
 (defn string-contains? [string s]
   (not= -1 (.indexOf string s)))
 
-(defn contains-lang-name? [lang lang-name]
-  (string-contains? (-> lang :name lower-case) lang-name))
+(defn string-starts-with? [string s]
+  (= 0 (.indexOf string s)))
+
+(defn string-ends-with? [string s]
+  (if (re-find (re-pattern (str s "$")) string)
+    true
+    false))
+
+(defn lang-filter-pred [lang-name]
+  (if (and (string-starts-with? lang-name "\"") (string-ends-with? lang-name "\""))
+    =
+    string-contains?))
 
 (defn find-langs-with-name [langs lang-name]
-  (filter #(contains-lang-name? (val %) lang-name) langs))
+  (if (= "" lang-name)
+    {}
+    (let [filter-pred (lang-filter-pred lang-name)]
+      (apply hash-map (flatten (filter #(filter-pred (lower-case (-> % val :name)) (-> lang-name (s/replace #"\"" "") lower-case)) langs))))))
 
-(def shown-languages (atom preprocessed-languages))
+(defn matches-text [n]
+  (str n " language" (when-not (= n 1) "s")))
+
+(def shown-list-languages (atom (sort-by #(-> % val :name) preprocessed-languages)))
+
+(defn handle-search-input [search-term]
+  (remove-active!)
+  (let [filtered-langs (find-langs-with-name preprocessed-languages search-term)
+        filtered-lang-keys (keys filtered-langs)]
+    (doseq [lang-key filtered-lang-keys]
+      (activate-language! lang-key))
+    (dom/text (dom/select "#matches") (matches-text (count filtered-lang-keys)))))
 
 (defn on-search-input [event]
-  (swap! shown-languages (fn [cur-langs] (find-langs-with-name preprocessed-languages (-> event .-target .-value))))
-  (let [first-lang (first @shown-languages)
-        x (-> first-lang val :svg :x)
-        y (-> first-lang val :svg :y)]
-    (scroll-centered! x y)
-    (activate-language! (key first-lang))))
+  (handle-search-input (-> event .-target .-value)))
 
 (defn on-node-input [node f]
   (set! (.-oninput node) f))
@@ -192,6 +216,22 @@
 (defn on-window-load [f]
   (set! (.-onload js/window) f))
 
-(on-window-load #(do (make-graph! shown-languages)
-                     (setup-search-handlers!)))
+(defn make-language-list-item [[langk langv]]
+  [:li {:class (name langk)} (:name langv)])
+
+(defn on-lang-list-item-click [[langk {lang-name :name}] node event]
+  (toggle-class! (.-target event) :active))
+
+(defn make-language-list [langs]
+  (bind! "#lang-list"
+         (unify @langs make-language-list-item))
+  (on "#lang-list" :click on-lang-list-item-click))
+
+(defn on-window-load-handler! []
+  (make-graph! shown-languages)
+  (make-language-list shown-list-languages)
+  (setup-search-handlers!)
+  (svgpan.SvgPan. "viewport" (dom/select "#info-graph")))
+
+(on-window-load on-window-load-handler!)
 
