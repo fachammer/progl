@@ -12,7 +12,7 @@
   :plugins [[lein-cljsbuild "1.0.2"]
             [lein-ring "0.8.10"]]
   :uberjar-name "progl-standalone.jar"
-  :ring {:handler progl.handler/app}
+  :ring {:handler progl.app/start}
   :hooks [leiningen.cljsbuild]
   :source-paths ["src/clj"]
   :cljsbuild {
