@@ -126,7 +126,7 @@ input:focus {
   position: relative;
   overflow-y: scroll;
   list-style-type: none;
-  height: 95%;
+  height: 92%;
   padding: 0;
 }
 
@@ -146,4 +146,9 @@ td:first-child {
   font-weight: bold;
   min-width: 30%;
   max-width: 30%;
+}
+
+td:nth-child(2) {
+  min-width: 70%;
+  max-width: 70%;
 }
