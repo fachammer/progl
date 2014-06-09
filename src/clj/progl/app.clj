@@ -13,4 +13,5 @@
   (handler/site app-routes))
 
 (defn -main [port]
-  (jetty/run-jetty start {:port port}))
+  (jetty/run-jetty start {:port (Integer. port)}))
+
