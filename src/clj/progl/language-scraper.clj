@@ -61,8 +61,13 @@
 (defn parse-years [years]
   (map #(read-string (subs % 0 4)) years))
 
+(defn parse-name [lang-name]
+  (if (= lang-name "SQL aka structured query language")
+    "SQL"
+    (s/replace lang-name #" \(.*\).*$" "")))
+
 (defn parse-names [names]
-  (map #(s/replace % #" \(.*\).*$" "") names))
+  (map parse-name names))
 
 (defn parse-creator [creator]
   (apply hash-set (remove #(= % "") (map s/trim (s/split creator #",")))))
@@ -70,8 +75,7 @@
 (defn parse-creators [creators]
   (map parse-creator creators))
 
-(def name->keyword-exceptions {"SQL aka structured query language" :sql
-                               "GOM – Good Old Mad" :gom
+(def name->keyword-exceptions {"GOM – Good Old Mad" :gom
                                "MAD – Michigan Algorithm Decoder" :mad
                                "Korn Shell" :ksh
                                "Bourne Shell" :sh
@@ -101,10 +105,7 @@
                                "Standard C" :c
                                "Smalltalk-80" :smalltalk
                                "Boehm" :boehm-unnamed-coding-system
-                               "Turbo Pascal" :pascal
-                               "C++" :cpp
-                               "Standard C++" :standard-cpp
-                               "Ada ISO 8652:1987" :ada-iso-8652})
+                               "Turbo Pascal" :pascal})
 
 
 
@@ -112,7 +113,13 @@
   (keyword
    (if (contains? name->keyword-exceptions string)
      (name->keyword-exceptions string)
-     (-> string (s/replace #"[()]" "") (s/replace #"#" "sharp")(s/replace #" |/" "-") (s/lower-case)))))
+     (-> string
+         (s/replace #"[()]" "")
+         (s/replace #"#" "sharp")
+         (s/replace #" |/|:" "-")
+         (s/replace #"\+" "PLUS")
+         (s/replace #"\." "dot")
+         (s/lower-case)))))
 
 (defn language-keywords [names]
   (apply hash-set (map name->keyword names)))
@@ -141,13 +148,6 @@
                     (->> rows select-creators parse-creators)
                     (->> rows select-predecessors parse-predecessors)
                     (->> rows select-urls))))
-
-
-(defn languages-with-nonexistent-predecessor [tl]
-  (sort (filter (fn [timeline-entry] (some #(not (contains? tl %)) (:influenced-by (val timeline-entry)))) tl)))
-
-(defn nonexistent-predecessors [tl]
-  (filter #(not (contains? tl %)) (reduce into (map #(:influenced-by (val %)) tl))))
 
 (defn progl-timeline []
   (-> (fetch-wiki-article tl-article) select-wikitable select-rows timeline))

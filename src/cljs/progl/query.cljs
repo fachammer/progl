@@ -21,7 +21,5 @@
     string-contains?))
 
 (defn query [langs lang-query]
-  (if (= "" lang-query)
-    {}
-    (let [filter-pred (lang-filter-pred lang-query)]
-      (apply hash-map (flatten (filter #(filter-pred (lower-case (-> % val :name)) (-> lang-query (s/replace #"\"" "") lower-case)) langs))))))
+  (let [filter-pred (lang-filter-pred lang-query)]
+    (apply hash-map (flatten (sort-by #(-> % val :name) (filter #(filter-pred (lower-case (-> % val :name)) (-> lang-query (s/replace #"\"" "") lower-case)) langs))))))

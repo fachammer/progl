@@ -2,11 +2,13 @@
   (:require-macros [c2.util :refer [bind!]])
   (:require [progl.languages :as l]
             [progl.ui.search :refer [search-exact]]
+            [progl.ui.core :as ui]
             [progl.dom :as dom]
             [c2.scale :as scale]
             [c2.maths :as math]
             [c2.core :refer [unify]]
             [c2.event :refer [on]]
+            [c2.dom :refer [attr]]
             [clojure.string :as s]
             [svgpan.SvgPan :as svgpan]))
 
@@ -18,17 +20,8 @@
   (int ((scale/linear :domain [0 100]
                 :range [0 dimension]) percentage)))
 
-(defn percentage [value]
-  (str percentage "%"))
-
-(defn pixels [value]
-  (str value "px"))
-
 (defn translate [& {:keys [x y]}]
   (str "translate(" x " " y ")"))
-
-(defn scale [scale-factor]
-  (str "scale(" scale-factor ")"))
 
 (defn calculate-year-intervals [min-year max-year interval-size]
   (map #(apply hash-set %) (partition-all interval-size (range min-year max-year))))
@@ -48,20 +41,15 @@
 (defn year-interval [year]
   (flatten (filter #(contains? % year) year-intervals)))
 
-(defn influenced-languages [language languages]
-  (apply hash-set (keys (filter #(contains? (:influenced-by (val %)) language) languages))))
-
 (defn filter-languages [languages]
-  (filter #(<= 0 (count (influenced-languages (key %) languages))) languages))
+  languages)
 
 (defn preprocess-languages [languages]
   (apply merge (flatten (map preprocess-language-year (vals (group-by #(year-interval (:appearance-year (val %))) (filter-languages languages)))))))
 
-(def preprocessed-languages (preprocess-languages l/languages))
-
 (defn make-language-node [[index [language-key {{:keys [x y radius]} :svg}]]]
   [:g {:transform  (translate :x x :y y)}
-    [:circle {:id (name language-key) :class (name language-key) :r radius}]])
+    [:circle {:class (name language-key) :r radius}]])
 
 (defn overflow-text [text]
   (if (>= (count text) 11)
@@ -94,11 +82,9 @@
                  :class css-classes
                  :transform (translate :x x1 :y y1))]))
 
-(def shown-languages (atom preprocessed-languages))
-
-(defn make-language-connections [[index [language-key {{:keys [x y]} :svg influenced-by :influenced-by :as language}]]]
+(defn make-language-connections [[index [language-key {{:keys [x y]} :svg influenced-by :influenced-by :as language}] languages]]
   [:g
-    (map #(connect-languages [language-key language] [% (% preprocessed-languages)]) (filter (partial contains? @shown-languages) influenced-by))])
+    (map #(connect-languages [language-key language] [% (% languages)]) (filter (partial contains? languages) influenced-by))])
 
 (defn year-grid-element [year]
   [:g {:transform (translate :x (pixel-scale (year-scale year) 12000) :y 20)}
@@ -114,19 +100,29 @@
 
 (defn make-all-language-connections [langs]
   (bind! "#connections"
-         (unify (map-indexed vector (vec langs)) make-language-connections)))
+         (unify (map-indexed #(vector %1 %2 langs) (vec langs)) make-language-connections)))
 
 (defn on-node-mouseover [[_ [langk _]] _ _]
-  (l/highlight-lang! langk))
+  (ui/highlight-lang! langk))
 
-(defn on-node-mouseout [[_ [langk _]] _ _]
-  (l/dehighlight-lang! langk))
+(defn on-node-mouseout [_ _ _]
+  (ui/remove-highlights!))
+
+(defn on-node-highlight [element]
+  (attr element :r "100"))
+
+(defn on-node-dehighlight [element]
+  (attr element :r "50"))
 
 (defn make-all-language-nodes [langs]
   (bind! "#nodes"
          (unify (map-indexed vector (vec langs)) make-language-node))
   (on "#nodes" :mouseover on-node-mouseover)
-  (on "#nodes" :mouseout on-node-mouseout))
+  (on "#nodes" :mouseout on-node-mouseout)
+  (comment (doseq [node (.-children (dom/element-by-id :nodes))]
+    (let [circle (.-firstChild node)]
+      (set! (.-onhighlight circle) on-node-highlight)
+      (set! (.-ondehighlight circle) on-node-dehighlight)))))
 
 (defn make-all-language-lables [langs]
   (bind! "#lables"
@@ -140,10 +136,12 @@
 
 (defn language-graph [graph-id langs]
   (let [preproc-langs (preprocess-languages langs)]
-    (year-grid "#year-grid")
+    (set! (.-width (dom/element-by-id "graph")) (.-innerWidth js/window))
+    (set! (.-height (dom/element-by-id "graph")) (.-innerHeight js/window))
+    ;(year-grid "#year-grid")
     (make-all-language-connections preproc-langs)
     (make-all-language-nodes preproc-langs)
-    (make-all-language-lables preproc-langs)
+    ;(make-all-language-lables preproc-langs)
     (on "#lables" :click (on-node-click langs))
-    (on "#nodes" :click (on-node-click langs)))
-  (svgpan.SvgPan. "viewport" (dom/element-by-id graph-id)))
+    (on "#nodes" :click (on-node-click langs))))
+  ;(svgpan.SvgPan. "viewport" (dom/element-by-id graph-id)))

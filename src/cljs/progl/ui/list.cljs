@@ -4,7 +4,7 @@
             [c2.core :refer [unify]]
             [c2.dom :refer [attr]]
             [progl.ui.search :refer [search-exact]]
-            [progl.languages :as l]
+            [progl.ui.core :as ui]
             [progl.dom :as dom]))
 
 (defn creators-label [creators]
@@ -25,51 +25,45 @@
 (defn lang-link [lang-key lang-name]
   [:a {:class (name lang-key) :langk (name lang-key) :href "#"} lang-name])
 
-(defn influences-entry [influences]
-  (table-entry-when-not-empty "Influenced by: " (interpose ", " (map #(->> (% l/languages) :name (lang-link %)) influences))))
+(defn influences-entry [influences languages]
+  (table-entry-when-not-empty "Influenced by: " (interpose ", " (map #(->> (% languages) :name (lang-link %)) influences))))
 
-(defn influenced-entry [influenced]
-  (table-entry-when-not-empty "Influenced: " (interpose ", " (map #(->> (% l/languages) :name (lang-link %)) influenced))))
+(defn influenced-entry [influenced languages]
+  (table-entry-when-not-empty "Influenced: " (interpose ", " (map #(->> (% languages) :name (lang-link %)) influenced))))
 
-(defn lang-list-item [[langk {lang-name :name
+(defn lang-list-item [[[langk {lang-name :name
                               creators :creators
                               year :appearance-year
                               influences :influenced-by
-                              influenced :influenced}]]
-  [:li {:class (name langk)}
+                              influenced :influenced}] languages]]
+  [:li {:class (str "active " (name langk))}
    [:div lang-name
-    [:table {:id (str "table-" (name langk)) :class (str "hidden " (name langk))}
+    [:table {:class (name langk)}
      (year-entry year)
      (creators-entry creators)
-     (influences-entry influences)
-     (influenced-entry influenced)]]])
-
-(defn on-lang-list-item-click [langs]
-  (fn [[langk# {lang-name# :name}] node# evt#]
-    (if (= "A" (-> evt# .-target .-tagName))
-      (search-exact langs (-> evt# .-target .-innerHTML))
-      (do
-        ;(search-exact langs lang-name#)
-        (dom/toggle-class! (dom/element-by-id (str "table-" (name langk#))) :hidden)))))
+     (influences-entry influences languages)
+     (influenced-entry influenced languages)]]])
 
 (defn link? [node]
   (= "A" (-> node .-tagName)))
 
-(defn on-lang-list-item-mouseover [[langk _] _ evt]
-  (let [event-target (-> evt .-target)]
-    (when (link? event-target)
-      (l/highlight-lang! (attr event-target :langk)))
-      (l/highlight-lang! langk)))
+(defn on-lang-list-item-click [langs]
+  (fn [_ _ evt#]
+    (when (link? (.-target evt#))
+      (search-exact langs (-> evt# .-target .-innerHTML)))))
 
-(defn on-lang-list-item-mouseout [[langk _] _ evt]
+(defn on-lang-list-item-mouseover [[[langk _] _] _ evt]
   (let [event-target (-> evt .-target)]
     (when (link? event-target)
-      (l/dehighlight-lang! (attr event-target :langk)))
-      (l/dehighlight-lang! langk)))
+      (ui/highlight-lang! (attr event-target :langk)))
+    (ui/highlight-lang! langk)))
+
+(defn on-lang-list-item-mouseout [_ _ _]
+  (ui/remove-highlights!))
 
 (defn language-list [id langs]
   (let [css-id (str "#" (name id))]
-    (bind! css-id (unify @langs lang-list-item))
-    (on css-id :click (on-lang-list-item-click @langs))
+    (bind! css-id (unify (map #(vector % langs) langs) lang-list-item))
+    (on css-id :click (on-lang-list-item-click langs))
     (on css-id :mouseover on-lang-list-item-mouseover)
     (on css-id :mouseout on-lang-list-item-mouseout)))

@@ -1,22 +1,21 @@
 (ns progl.ui.search
   (:require [progl.dom :as dom]
             [progl.query :as q]
+            [progl.ui.core :as ui]
             [progl.languages :as l]))
 
 (defn matches-text [n]
   (str (if (= n 0) "no" n) " language" (when (> n 1) "s") " selected"))
 
-(defn show-langs [langs]
-  (doseq [[langk _] langs]
-    (dom/remove-class! (dom/element-by-id (str "table-" (name langk))) :hidden)))
-
 (defn search [langs query]
+  (.log js/console (str "Query: " query))
   (-> (dom/element-by-id :search) (dom/set-value! query))
   (let [result (q/query langs query)]
-    (swap! l/list-languages (fn [_] (if (empty? result) l/languages result)))
-    (show-langs result)
-    (l/remove-highlights!)
-    (l/activate-langs! result)
+    (ui/remove-highlights!)
+    (ui/remove-active!)
+    (if (= query "")
+      (ui/activate-list-langs! (keys result))
+      (ui/activate-langs! (keys result)))
     (-> (dom/element-by-id :matches)
         (dom/set-innerhtml! (matches-text (count result))))
     result))
