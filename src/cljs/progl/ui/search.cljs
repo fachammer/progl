@@ -5,7 +5,7 @@
             [progl.languages :as l]))
 
 (defn matches-text [n]
-  (str (if (= n 0) "no" n) " language" (when (> n 1) "s") " selected"))
+  (str (if (= n 0) "no" n) " language" (when (> n 1) "s") " found"))
 
 (defn search [langs query]
   (.log js/console (str "Query: " query))

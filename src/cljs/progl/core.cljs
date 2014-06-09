@@ -8,6 +8,7 @@
 (defn on-window-load-handler []
   (language-search :search l/languages)
   (language-graph :graph l/languages)
-  (language-list :list l/languages))
+  (language-list :list l/languages)
+  (search l/languages ""))
 
 (dom/on-window-load on-window-load-handler)
