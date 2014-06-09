@@ -3,13 +3,33 @@
 }
 
 circle, rect {
-  fill: white;
-  stroke: #222;
-  stroke-width: 1px;
+  fill: #bbb;
 }
 
-.active circle, circle.active, circle:hover {
-  fill: #bbb;
+.active circle, circle.active {
+  fill: hsl(180, 60%, 70%);
+}
+
+.highlight circle, circle.highlight, circle:hover {
+  fill: hsl(180, 60%, 50%);
+}
+
+#list li:hover, #list li.highlight {
+  background-color: hsl(180, 60%, 50%);
+}
+
+a.highlight {
+  color: hsl(180, 60%, 70%);
+}
+
+line.active, line:hover {
+  stroke: hsl(180, 60%, 70%);
+  stroke-width: 10px;
+}
+
+line.highlight {
+  stroke: hsl(180, 60%, 30%);
+  stroke-width: 10px;
 }
 
 circle, line, text{
@@ -18,15 +38,16 @@ circle, line, text{
 
 line {
   stroke: #bbb;
-  stroke-width: 1px;
+  stroke-width: 4px;
   fill: none;
-  marker-end: url(#markerArrow);
 }
 
-line.active, line:hover {
-  stroke: #222;
-  stroke-width: 4px;
-  marker-end: url(#markerArrow-active);
+line.year, line.year:hover {
+  stroke: #bbb;
+  stroke-width: 1px;
+  fill: none;
+  marker-end: none;
+  cursor: default;
 }
 
 text, label, li{
@@ -37,6 +58,10 @@ text, label, li{
   font-family: Arial, sans-serif;
   text-transform: uppercase;
   font-weight: bold;
+}
+
+text.year {
+  cursor: default;
 }
 
 #markerArrow > path{
@@ -64,9 +89,15 @@ body{
 }
 
 #search{
-  width: 70%;
+  width: 95%;
   padding: 0;
   padding-bottom: 2px;
+  padding-right: 10px;
+}
+
+#matches {
+  margin-left: 10px;
+  width: 20%;
 }
 
 input {
@@ -80,10 +111,10 @@ input:focus {
 }
 
 #search-area{
-  height: 5%;
+  height: 8%;
 }
 
-#lang-list {
+#list {
   position: relative;
   overflow-y: scroll;
   list-style-type: none;
@@ -91,7 +122,7 @@ input:focus {
   padding: 0;
 }
 
-#lang-list li {
+#list li {
   font-size: 10pt;
   font-weight: normal;
   text-transform: none;
@@ -99,10 +130,34 @@ input:focus {
   cursor: pointer;
 }
 
-#lang-list li:hover {
-  background-color: #ddd;
+#list li.active {
+  /*background-color: #aaa;*/
 }
 
-#lang-list li.active {
-  background-color: #aaa;
+#graph {
+  position: absolute;
+  left: 25%;
+  width: 75%;
+}
+
+a {
+  color: black;
+}
+
+table {
+  table-layout: fixed;
+}
+
+td:first-child {
+  font-size: 8pt;
+  font-weight: bold;
+  min-width: 30%;
+  max-width: 30%;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+  height: 0;
+  width: 0;
 }

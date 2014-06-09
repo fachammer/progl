@@ -64,8 +64,11 @@
 (defn parse-names [names]
   (map #(s/replace % #" \(.*\).*$" "") names))
 
+(defn parse-creator [creator]
+  (apply hash-set (remove #(= % "") (map s/trim (s/split creator #",")))))
+
 (defn parse-creators [creators]
-  (map #(apply hash-set (map s/trim (s/split % #","))) creators))
+  (map parse-creator creators))
 
 (def name->keyword-exceptions {"SQL aka structured query language" :sql
                                "GOM – Good Old Mad" :gom
@@ -109,7 +112,7 @@
   (keyword
    (if (contains? name->keyword-exceptions string)
      (name->keyword-exceptions string)
-     (-> string (s/replace #"[()]" "") (s/replace #"#" "sharp")(s/replace #" " "-") (s/lower-case)))))
+     (-> string (s/replace #"[()]" "") (s/replace #"#" "sharp")(s/replace #" |/" "-") (s/lower-case)))))
 
 (defn language-keywords [names]
   (apply hash-set (map name->keyword names)))
@@ -148,6 +151,17 @@
 
 (defn progl-timeline []
   (-> (fetch-wiki-article tl-article) select-wikitable select-rows timeline))
+
+(defn influenced-languages [lang-key languages]
+  (apply hash-set (keys (filter #(contains? (:influenced-by (val %)) lang-key) languages))))
+
+(defn assoc-influenced [[lang-key lang] languages]
+  [lang-key (assoc lang :influenced (influenced-languages lang-key languages))])
+
+(defn with-influenced [languages]
+  (apply hash-map (flatten (map #(assoc-influenced % languages) languages))))
+
+(with-influenced (progl-timeline))
 
 (defn select-infobox [markup]
   (html/select markup [:table.infobox]))

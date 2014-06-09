@@ -1,1 +1,1 @@
-web: java $JVM_OPTS -cp target/app-standalone.jar clojure.main -m app.web
+web: java $JVM_OPTS -cp target/progl-standalone.jar clojure.main -m app.web

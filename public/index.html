@@ -3,19 +3,20 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/page.css" />
-      <script type='text/javascript' id='lt_ws' src='http://localhost:50046/socket.io/lighttable/ws.js'></script>
+      <script type='text/javascript' id='lt_ws' src='http://localhost:18380/socket.io/lighttable/ws.js'></script>
     <script src="js/cljs.js"></script>
   </head>
   <body>
       <form id="search-form">
           <div id="search-area">
-              <input id="search" type="text" placeholder="Search"/>
-              <label id="matches">0 languages</label>
+              <input id="search" type="search" placeholder="Search for programming languages"/>
+              <label id="matches">no language selected</label>
           </div>
-          <ul id="lang-list"></ul>
+          <ul id="list"></ul>
       </form>
-      <svg id="info-graph">
-          <g id="viewport">
+      <svg id="graph">
+          <g id="viewport" transform="matrix(0.09486451745033266,0,0,0.09486451745033266,72.00000580960479,82.00000208044004)">
+              <g id="year-grid"></g>
               <g id="connections"></g>
               <g id="nodes"></g>
               <g id="lables"></g>

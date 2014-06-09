@@ -22,7 +22,4 @@
         :compiler {:output-to "public/js/cljs.js"
                    :pretty-print true
                    :libs ["lib/closure/svgpan.js"]}
-        :jar true}}}
-  :profiles
-  {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
-                        [ring-mock "0.1.5"]]}})
+        :jar true}}})
