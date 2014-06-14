@@ -14,3 +14,5 @@ TODO
 - add explanations
 - fix bug where on selecting the creator gets a hyperlink
 - use core.async with the graph and for highlighting as well
+- remove lighttable debug script
+- use whole program optimization
