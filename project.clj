@@ -7,7 +7,8 @@
                  [enlive "1.1.5"]
                  [compojure "1.1.6"]
                  [ring/ring-jetty-adapter "1.2.2"]
-                 [ring/ring-devel "1.2.2"]]
+                 [ring/ring-devel "1.2.2"]
+                 [org.clojure/core.async "0.1.303.0-886421-alpha"]]
   :min-lein-version "2.0.0"
   :plugins [[lein-cljsbuild "1.0.2"]
             [lein-ring "0.8.10"]]

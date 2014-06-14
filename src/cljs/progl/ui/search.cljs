@@ -1,14 +1,17 @@
 (ns progl.ui.search
+  (:require-macros [cljs.core.async.macros :as asyncm :refer [go-loop]])
   (:require [progl.dom :as dom]
             [progl.query :as q]
+            [progl.util :as util :refer [on-channel]]
             [progl.ui.core :as ui]
-            [progl.languages :as l]))
+            [progl.languages :as l]
+            [progl.ui.select :as select]
+            [cljs.core.async :as async :refer [chan pipe tap]]))
 
 (defn matches-text [n]
   (str (if (= n 0) "no" n) " language" (when (> n 1) "s") " found"))
 
 (defn search [langs query]
-  (.log js/console (str "Query: " query))
   (-> (dom/element-by-id :search) (dom/set-value! query))
   (let [result (q/query langs query)]
     (ui/remove-highlights!)
@@ -20,14 +23,13 @@
         (dom/set-innerhtml! (matches-text (count result))))
     result))
 
-(defn search-exact [langs query]
-  (search langs (str "\"" query "\"")))
+(defn set-search-input [text]
+  (-> (dom/element-by-id :search) (dom/set-value! text)))
 
-(defn on-search-input [langs]
-  (fn [evt#]
-    (let [query (-> evt# .-target .-value)]
-      (search langs query))))
+(defn set-matches-text [matches]
+  (-> (dom/element-by-id :matches) (dom/set-innerhtml! (matches-text (count matches)))))
 
 (defn language-search [search-id langs]
-  (-> (dom/element-by-id search-id)
-      (dom/on-input (on-search-input langs))))
+  (pipe (dom/listen-value (dom/element-by-id :search) "input") select/in)
+  (on-channel select/in-take set-search-input)
+  (on-channel select/out set-matches-text))

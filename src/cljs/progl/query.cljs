@@ -20,6 +20,13 @@
     =
     string-contains?))
 
+(def subquery-separator ",")
+
+(defn subqueries [lang-query]
+  (remove empty? (map s/trim (s/split lang-query (re-pattern subquery-separator)))))
+
 (defn query [langs lang-query]
-  (let [filter-pred (lang-filter-pred lang-query)]
-    (apply hash-map (flatten (sort-by #(-> % val :name) (filter #(filter-pred (lower-case (-> % val :name)) (-> lang-query (s/replace #"\"" "") lower-case)) langs))))))
+  (if-not (string-contains? lang-query subquery-separator)
+    (let [filter-pred (lang-filter-pred lang-query)]
+      (apply hash-map (flatten (sort-by #(-> % val :name) (filter #(filter-pred (lower-case (-> % val :name)) (-> lang-query (s/replace #"\"" "") lower-case)) langs)))))
+    (apply merge (map #(query langs %) (subqueries lang-query)))))

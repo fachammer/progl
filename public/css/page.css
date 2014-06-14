@@ -152,3 +152,7 @@ td:nth-child(2) {
   min-width: 70%;
   max-width: 70%;
 }
+
+.hidden {
+  display: none;
+}

@@ -14,7 +14,6 @@
     (activate-lang! k)))
 
 (defn activate-list-langs! [lang-keys]
-  (.log js/console lang-keys)
   (doseq [k lang-keys]
     (doseq [el (dom/elements-by-class k)]
       (let [tag (.-tagName el)]

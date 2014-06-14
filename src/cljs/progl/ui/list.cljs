@@ -3,9 +3,11 @@
   (:require [c2.event :refer [on]]
             [c2.core :refer [unify]]
             [c2.dom :refer [attr]]
-            [progl.ui.search :refer [search-exact]]
             [progl.ui.core :as ui]
-            [progl.dom :as dom]))
+            [progl.dom :as dom]
+            [progl.ui.select :as select]
+            [progl.util :as util :refer [on-channel]]
+            [cljs.core.async :as async :refer [put!]]))
 
 (defn creators-label [creators]
   (str "Creator" (when-not (= 1 (count creators)) "s") ": "))
@@ -13,11 +15,16 @@
 (defn creators-entry [creators]
   (when-not (empty? creators) [:tr [:td (creators-label creators)] [:td (apply str (interpose ", " creators))]]))
 
-(defn table-entry [label value]
-  [:tr [:td label] [:td value]])
+(defn table-entry
+  ([label value]
+   (table-entry label value false))
+  ([label value hidden?]
+    [:tr {:class (if hidden? "hidden" "")} [:td label] [:td value]]))
 
 (defn table-entry-when-not-empty [label value]
-  (when-not (empty? value) (table-entry label value)))
+  (if (empty? value)
+    (table-entry label value true)
+    (table-entry label value false)))
 
 (defn year-entry [year]
   (table-entry "Appearance year: " year))
@@ -47,10 +54,14 @@
 (defn link? [node]
   (= "A" (-> node .-tagName)))
 
-(defn on-lang-list-item-click [langs]
-  (fn [_ _ evt#]
-    (when (link? (.-target evt#))
-      (search-exact langs (-> evt# .-target .-innerHTML)))))
+(defn with-quotes [s]
+  (str "\"" s "\""))
+
+(defn on-lang-list-item-click [[[_ {lang-name :name}] _] _ evt]
+  (let [target (.-target evt)]
+    (if (link? target)
+      (put! select/in (with-quotes (.-innerHTML target)))
+      (put! select/in (with-quotes lang-name)))))
 
 (defn on-lang-list-item-mouseover [[[langk _] _] _ evt]
   (let [event-target (-> evt .-target)]
@@ -61,9 +72,16 @@
 (defn on-lang-list-item-mouseout [_ _ _]
   (ui/remove-highlights!))
 
+(def list-langs (atom nil))
+
+(defn select-langs [langs]
+  (swap! list-langs (fn [_] (sort-by #(-> % val :name) langs))))
+
 (defn language-list [id langs]
+  (select-langs langs)
+  (on-channel select/out select-langs)
   (let [css-id (str "#" (name id))]
-    (bind! css-id (unify (map #(vector % langs) langs) lang-list-item))
-    (on css-id :click (on-lang-list-item-click langs))
+    (bind! css-id (unify (map #(vector % langs) @list-langs) lang-list-item))
+    (on css-id :click on-lang-list-item-click)
     (on css-id :mouseover on-lang-list-item-mouseover)
     (on css-id :mouseout on-lang-list-item-mouseout)))

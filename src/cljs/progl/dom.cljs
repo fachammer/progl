@@ -1,6 +1,8 @@
 (ns progl.dom
   (:require [c2.dom :as dom]
-            [clojure.string :as s]))
+            [clojure.string :as s]
+            [goog.events :as events]
+            [cljs.core.async :as async]))
 
 (defn set-value! [node value]
   (set! (.-value node) value))
@@ -45,3 +47,15 @@
 
 (defn on-input [node f]
   (set! (.-oninput node) f))
+
+(defn listen [el evt-type]
+  (let [out (async/chan)]
+    (events/listen el evt-type
+                   (fn [evt] (async/put! out evt)))
+    out))
+
+(defn target-value [evt]
+  (-> evt .-target .-value))
+
+(defn listen-value [el evt-type]
+  (async/map< target-value (listen el evt-type)))
