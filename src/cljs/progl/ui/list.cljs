@@ -42,7 +42,7 @@
   (table-entry-when-not-empty [:a {:class "influenced" :href "#"} "Influenced: "] (interpose ", " (map #(->> (% languages) :name (lang-link %)) influenced))))
 
 (defn url-entry [url]
-  (when url (table-entry "" [:a {:class "url" :href (str "http://en.wikipedia.org" url) :target "_blank"} "More info"])))
+  (when url (table-entry [:a {:class "url" :href (str "http://en.wikipedia.org" url) :target "_blank"} "More info"] "")))
 
 (defn lang-list-item [[[langk {lang-name :name
                               creators :creators

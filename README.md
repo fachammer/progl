@@ -11,3 +11,4 @@ TODO
 - remove lighttable debug script
 - use whole program optimization
 - throttle input
+- maybe different colors for influences and influenced languages

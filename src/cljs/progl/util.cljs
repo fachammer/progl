@@ -1,6 +1,6 @@
 (ns progl.util
-  (:require-macros [cljs.core.async.macros :as m :refer [go]])
-  (:require [cljs.core.async :as async :refer [chan <! mult tap pipe map< alt! alts! timeout]]))
+  (:require-macros [cljs.core.async.macros :as m :refer [go alt!]])
+  (:require [cljs.core.async :as async :refer [chan <! mult tap pipe map< alts! timeout]]))
 
 (defn on-channel [ch f]
   (let [channel (tap ch (chan))]

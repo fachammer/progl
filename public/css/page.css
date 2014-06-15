@@ -57,7 +57,7 @@ circle.highlight, circle.sec-highlight {
   stroke-width: 150px;
 }
 
-circle.highlight {
+circle.highlight, circle.highlight.sec-highlight {
   fill: hsl(280, 70%, 60%);
   stroke: hsl(280, 70%, 60%);
 }
@@ -75,22 +75,18 @@ li.highlight{
   color: hsl(280, 70%, 60%);
 }
 
-a.highlight, a.influences:hover, a.influenced:hover, a.year:hover {
+a.highlight {
   color: hsl(280, 70%, 60%);
 }
 
+a:hover,
 a.sec-highlight {
   color: hsl(280, 50%, 80%);
 }
 
-.highlight a.highlight,
-.highlight a.influences:hover,
-.highlight a.influenced:hover,
-.highlight a.year:hover{
+.highlight a:hover,
+.highlight a.highlight, {
   color: hsl(280, 50%, 80%);
-}
-
-.highlight a.sec-highlight {
 }
 
 line.selected {
