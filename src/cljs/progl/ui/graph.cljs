@@ -1,16 +1,18 @@
 (ns progl.ui.graph
-  (:require-macros [c2.util :refer [bind!]])
+  (:require-macros [c2.util :refer [bind!]]
+                   [cljs.core.async.macros :as m :refer [go]])
   (:require [progl.languages :as l]
-            [progl.ui.search :refer [search-exact]]
-            [progl.ui.core :as ui]
+            [progl.ui.select :as select]
+            [progl.ui.highlighting :as h]
             [progl.dom :as dom]
+            [progl.util :refer [with-quotes on-channel]]
             [c2.scale :as scale]
             [c2.maths :as math]
             [c2.core :refer [unify]]
             [c2.event :refer [on]]
             [c2.dom :refer [attr]]
             [clojure.string :as s]
-            [svgpan.SvgPan :as svgpan]))
+            [cljs.core.async :as async :refer [>! pipe map<]]))
 
 (defn year-scale [value]
   ((scale/linear :domain [1942 2014]
@@ -49,7 +51,8 @@
 
 (defn make-language-node [[index [language-key {{:keys [x y radius]} :svg}]]]
   [:g {:transform  (translate :x x :y y)}
-    [:circle {:class (name language-key) :r radius}]])
+    [:circle {:class (str "node " (name language-key))
+              :r radius}]])
 
 (defn overflow-text [text]
   (if (>= (count text) 11)
@@ -73,8 +76,7 @@
         dx (- x2 x1)
         dy (- y2 y1)
         line-angle (math/atan (/ (- y1 y2) (- x1 x2)))
-        css-classes (str (name language1-key) " "
-                         (name language2-key))]
+        css-classes (str "connection " (name language1-key) " " (name language2-key))]
     [:g
       (make-line :x1 dx :y1 dy
                  :x2 (- (* r1 (math/cos line-angle)))
@@ -102,46 +104,55 @@
   (bind! "#connections"
          (unify (map-indexed #(vector %1 %2 langs) (vec langs)) make-language-connections)))
 
-(defn on-node-mouseover [[_ [langk _]] _ _]
-  (ui/highlight-lang! langk))
+(defn lang-node [lang-key]
+  (dom/element-by-class js/document :node lang-key))
 
-(defn on-node-mouseout [_ _ _]
-  (ui/remove-highlights!))
+(defn lang-connections [lang-key]
+  (dom/elements-by-class js/document :connection lang-key))
 
-(defn on-node-highlight [element]
-  (attr element :r "100"))
+(defn apply-to-nodes [lang-keys f & args]
+  (doseq [lk lang-keys]
+    (apply f (lang-node lk) args)
+    (doseq [conn (lang-connections lk)]
+      (apply f conn args))))
 
-(defn on-node-dehighlight [element]
-  (attr element :r "50"))
+(defn select-nodes [langs]
+  (dom/remove-classes! :selected)
+  (dom/remove-classes! :highlight)
+  (dom/remove-classes! :sec-highlight)
+  (apply-to-nodes (keys langs) dom/add-class! :selected))
+
+(defn highlight-nodes [[prim-lang & sec-langs]]
+  (apply-to-nodes [prim-lang] dom/add-class! :highlight)
+  (when sec-langs
+    (apply-to-nodes sec-langs dom/add-class! :sec-highlight)))
+
+(defn dehighlight-nodes [lang-keys]
+  (apply-to-nodes lang-keys dom/remove-class! :highlight)
+  (apply-to-nodes lang-keys dom/remove-class! :sec-highlight))
+
+(defn node-click->query [[[_ [_ {lang-name :name}]] _ _]] (with-quotes lang-name))
+
+(defn mouseover->lang-key [[[_ [langk _]] _ _]] [langk])
 
 (defn make-all-language-nodes [langs]
   (bind! "#nodes"
          (unify (map-indexed vector (vec langs)) make-language-node))
-  (on "#nodes" :mouseover on-node-mouseover)
-  (on "#nodes" :mouseout on-node-mouseout)
-  (comment (doseq [node (.-children (dom/element-by-id :nodes))]
-    (let [circle (.-firstChild node)]
-      (set! (.-onhighlight circle) on-node-highlight)
-      (set! (.-ondehighlight circle) on-node-dehighlight)))))
+  (pipe (map< node-click->query (dom/c2-listen "#nodes" :click)) select/in)
+  (pipe (map< mouseover->lang-key (dom/c2-listen "#nodes" :mouseover)) h/highlight-in)
+  (pipe (map< mouseover->lang-key (dom/c2-listen "#nodes" :mouseout)) h/dehighlight-in)
+  (on-channel select/out select-nodes)
+  (on-channel h/highlight-out highlight-nodes)
+  (on-channel h/dehighlight-out dehighlight-nodes))
 
 (defn make-all-language-lables [langs]
   (bind! "#lables"
-         (unify (map-indexed vector (vec langs)) make-language-label))
-  (on "#lables" :mouseover on-node-mouseover)
-  (on "#lables" :mouseout on-node-mouseout))
-
-(defn on-node-click [langs]
-  (fn [[_ [_ {lang-name# :name}]] _ _]
-    (search-exact langs lang-name#)))
+         (unify (map-indexed vector (vec langs)) make-language-label)))
 
 (defn language-graph [graph-id langs]
   (let [preproc-langs (preprocess-languages langs)]
-    (set! (.-width (dom/element-by-id "graph")) (.-innerWidth js/window))
-    (set! (.-height (dom/element-by-id "graph")) (.-innerHeight js/window))
     ;(year-grid "#year-grid")
     (make-all-language-connections preproc-langs)
     (make-all-language-nodes preproc-langs)
     ;(make-all-language-lables preproc-langs)
-    (on "#lables" :click (on-node-click langs))
-    (on "#nodes" :click (on-node-click langs))))
-  ;(svgpan.SvgPan. "viewport" (dom/element-by-id graph-id)))
+    ))

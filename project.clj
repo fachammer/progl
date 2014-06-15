@@ -1,6 +1,6 @@
 (defproject progl "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
-  :url "http://example.com/FIXME"
+  :description "interactive infographic of programming languages"
+  :url "http://github.com/fablman/progl"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2173"]
                  [com.keminglabs/c2 "0.2.3"]
@@ -21,6 +21,6 @@
       :main {
         :source-paths ["src/cljs"]
         :compiler {:output-to "public/js/cljs.js"
-                   :pretty-print true
-                   :libs ["lib/closure/svgpan.js"]}
+                   :pretty-print false
+                   :optimizations :advanced}
         :jar true}}})

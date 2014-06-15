@@ -12,7 +12,7 @@ text, span, li{
   font-weight: bold;
 }
 
-circle, text{
+circle, text, li{
   cursor: pointer;
 }
 
@@ -21,11 +21,15 @@ body{
 }
 
 li {
-  display: none;
   font-size: 10pt;
   font-weight: normal;
   text-transform: none;
   padding: 10px 13px;
+}
+
+h3 {
+  margin-left: 3px;
+  color: hsl(180, 70%, 60%);
 }
 
 a {
@@ -43,34 +47,63 @@ line {
   fill: none;
 }
 
-li.active {
-  display: block;
-}
-
-circle.active, circle.highlight {
+circle.selected {
   fill: hsl(180, 70%, 60%);
   stroke: hsl(180, 70%, 60%);
+  stroke-width: 75px;
 }
 
-circle.active {
-  stroke-width: 100px;
+circle.highlight, circle.sec-highlight {
+  stroke-width: 150px;
 }
 
 circle.highlight {
-  stroke-width: 190px;
+  fill: hsl(280, 70%, 60%);
+  stroke: hsl(280, 70%, 60%);
+}
+
+circle.sec-highlight {
+  fill: hsl(280, 50%, 80%);
+  stroke: hsl(280, 50%, 80%);
 }
 
 li.highlight{
-  background-color: hsl(180, 70%, 60%);
+  background-color: hsl(280, 20%, 90%);
 }
 
-a.highlight {
-  color: hsl(180, 50%, 80%);
+.highlight h3 {
+  color: hsl(280, 70%, 60%);
 }
 
-line.active, line.highlight {
+a.highlight, a.influences:hover, a.influenced:hover, a.year:hover {
+  color: hsl(280, 70%, 60%);
+}
+
+a.sec-highlight {
+  color: hsl(280, 50%, 80%);
+}
+
+.highlight a.highlight,
+.highlight a.influences:hover,
+.highlight a.influenced:hover,
+.highlight a.year:hover{
+  color: hsl(280, 50%, 80%);
+}
+
+.highlight a.sec-highlight {
+}
+
+line.selected {
   stroke-width: 10px;
   stroke: hsl(180, 70%, 60%);
+}
+
+line.highlight {
+  stroke-width: 10px;
+}
+
+line.highlight {
+  stroke: hsl(280, 70%, 60%);
 }
 
 line.year, line.year:hover {
@@ -139,18 +172,17 @@ input:focus {
 
 table {
   table-layout: fixed;
+  width: 100%;
 }
 
 td:first-child {
   font-size: 8pt;
   font-weight: bold;
-  min-width: 30%;
-  max-width: 30%;
+  width: 30%;
 }
 
 td:nth-child(2) {
-  min-width: 70%;
-  max-width: 70%;
+  width: 70%;
 }
 
 .hidden {
