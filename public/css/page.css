@@ -25,27 +25,32 @@ li {
   font-weight: normal;
   text-transform: none;
   padding: 10px 13px;
+  transition: background-color 200ms;
 }
 
 h3 {
   margin-left: 3px;
   color: hsl(180, 70%, 60%);
+  transition: color 200ms;
 }
 
 a {
   color: black;
   text-decoration: underline;
+  transition: color 200ms;
 }
 
 circle {
   fill: hsl(180, 0%, 80%);
   stroke: hsl(180, 0%, 80%);
+  transition: fill 200ms, stroke 200ms, stroke-width 100ms;
 }
 
 line {
   stroke: hsl(180, 0%, 80%);
   stroke-width: 4px;
   fill: none;
+  transition: stroke 200ms, stroke-width 100ms;
 }
 
 circle.selected {
@@ -54,11 +59,11 @@ circle.selected {
   stroke-width: 75px;
 }
 
-circle.highlight, circle.sec-highlight {
+circle.highlight, circle:hover, circle.sec-highlight {
   stroke-width: 150px;
 }
 
-circle.highlight, circle.highlight.sec-highlight {
+circle.highlight, circle:hover, circle.highlight.sec-highlight {
   fill: hsl(280, 70%, 60%);
   stroke: hsl(280, 70%, 60%);
 }
@@ -68,7 +73,7 @@ circle.sec-highlight {
   stroke: hsl(280, 50%, 80%);
 }
 
-li.highlight{
+li.highlight, li:hover {
   background-color: hsl(280, 20%, 90%);
 }
 
