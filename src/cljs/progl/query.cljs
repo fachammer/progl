@@ -31,7 +31,7 @@
   (if (= "" lang-query)
     {}
     (cond
-     (and (string-starts-with? lang-query "\"") (string-ends-with? lang-query "\"")) (single-query langs lang-query)
+     (and (string-starts-with? lang-query "\"") (string-ends-with? lang-query "\"") (not (string-contains? lang-query union-query-separator))) (single-query langs lang-query)
      (string-contains? lang-query union-query-separator) (union-query langs lang-query)
      (string-contains? lang-query intersection-query-separator) (intersection-query langs lang-query)
      :else (single-query langs lang-query))))
