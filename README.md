@@ -10,3 +10,4 @@ TODO
 - maybe different colors for influences and influenced languages?
 - fix bug: cursor not on right position when deleting text
 - fix bug: when clicking (selecting) on a node, the language should be highlighted, but insted only the node is highlighted
+- add feature: when ctrl-clicking or shift-clicking add language to selection
