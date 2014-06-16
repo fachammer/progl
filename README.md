@@ -7,4 +7,5 @@ TODO
 - fetch additional information from the wiki pages
 - add header
 - add explanations
-- maybe different colors for influences and influenced languages
+- maybe different colors for influences and influenced languages?
+- fix bug: cursor on right position when deleting text
