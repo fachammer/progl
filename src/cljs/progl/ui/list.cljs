@@ -118,7 +118,6 @@
       [langk])))
 
 (defn language-list [id langs]
-  ; (select-langs (sort-by-name langs))
   (on-channel (tap-new sorted-langs) select-langs)
   (on-channel (tap-new h/highlight-out) highlight-langs)
   (on-channel (tap-new h/dehighlight-out) dehighlight-langs)

@@ -7,5 +7,4 @@
 (def in (chan))
 (def in-take (mult in))
 
-
 (def out (mult (map< #(query languages %) (tap-new in-take))))

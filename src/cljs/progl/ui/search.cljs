@@ -5,7 +5,7 @@
             [progl.util :as util :refer [on-channel tap-new throttle]]
             [progl.languages :as l]
             [progl.ui.select :as select]
-            [cljs.core.async :as async :refer [pipe]]))
+            [cljs.core.async :as async :refer [pipe unique]]))
 
 (defn set-search-input [text]
   (-> (dom/element-by-id :search) (dom/set-value! text)))
@@ -19,6 +19,6 @@
 (def input-delay 350)
 
 (defn language-search [search-id langs]
-  (pipe (throttle (dom/listen-value (dom/element-by-id :search) "input") input-delay) select/in)
+  (pipe (unique (throttle (dom/listen-value (dom/element-by-id :search) "input") input-delay)) select/in)
   (on-channel (tap-new select/in-take) set-search-input)
   (on-channel (tap-new select/out) set-matches-text))

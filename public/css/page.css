@@ -16,6 +16,10 @@ circle, text, li{
   cursor: pointer;
 }
 
+a, h3, li, circle, line {
+   transition: all 200ms;
+}
+
 body{
   overflow: hidden;
 }
@@ -25,32 +29,27 @@ li {
   font-weight: normal;
   text-transform: none;
   padding: 10px 13px;
-  transition: background-color 200ms;
 }
 
 h3 {
   margin-left: 3px;
   color: hsl(180, 70%, 60%);
-  transition: color 200ms;
 }
 
 a {
   color: black;
   text-decoration: underline;
-  transition: color 200ms;
 }
 
 circle {
   fill: hsl(180, 0%, 80%);
   stroke: hsl(180, 0%, 80%);
-  transition: fill 200ms, stroke 200ms, stroke-width 100ms;
 }
 
 line {
   stroke: hsl(180, 0%, 80%);
   stroke-width: 4px;
   fill: none;
-  transition: stroke 200ms, stroke-width 100ms;
 }
 
 circle.selected {
@@ -104,24 +103,9 @@ line.selected {
   stroke: hsl(180, 70%, 60%);
 }
 
-line.highlight {
+line.highlight, line:hover {
   stroke-width: 10px;
-}
-
-line.highlight {
   stroke: hsl(280, 70%, 60%);
-}
-
-line.year, line.year:hover {
-  stroke: #bbb;
-  stroke-width: 1px;
-  fill: none;
-  marker-end: none;
-  cursor: default;
-}
-
-text.year {
-  cursor: default;
 }
 
 #defs{
