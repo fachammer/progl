@@ -16,9 +16,6 @@
     true
     false))
 
-(def langs {:ksh {:influenced #{:windows-powershell :zsh}, :appearance-year 1984, :name "Korn Shell", :creators #{"David Korn"}, :influenced-by #{:sh}, :url "/wiki/Korn_shell"},
- :lua {:influenced #{:falcon :squirrel}, :appearance-year 1993, :name "Lua", :creators #{"PUC-Rio" "Roberto Ierusalimschy et al. at Tecgraf"}, :influenced-by #{:clu :snobol :cplusplus :modula :scheme}, :url "/wiki/Lua_(programming_language)"}})
-
 (declare single-query)
 
 (def union-query-separator ",")
