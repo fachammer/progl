@@ -7,7 +7,7 @@
             [progl.dom :as dom]
             [progl.ui.select :as select]
             [progl.ui.highlighting :as h]
-            [progl.util :as util :refer [on-channel with-quotes link? pipe-map<]]
+            [progl.util :as util :refer [on-channel with-quotes link? pipe-map< tap-new]]
             [progl.query :as q]
             [cljs.core.async :as async :refer [>! chan map< tap mult pipe]]
             [clojure.string :as s]))
@@ -30,16 +30,16 @@
   (table-entry-when-not-empty (creators-label creators) (apply str (interpose ", " creators))))
 
 (defn year-entry [year]
-  (table-entry "Appearance year: " [:a {:class "year" :href "#"} year]))
+  (table-entry "Appearance year: " [:a {:class "year"} year]))
 
 (defn lang-link [lang-key lang-name]
-  [:a {:class (str "link " (name lang-key)) :href "#" :langk (name lang-key)} lang-name])
+  [:a {:class (str "link " (name lang-key)) :langk (name lang-key)} lang-name])
 
 (defn influences-entry [influences languages]
-  (table-entry-when-not-empty [:a {:class "influences" :href "#"} "Influenced by: "] (interpose ", " (map #(->> (% languages) :name (lang-link %)) influences))))
+  (table-entry-when-not-empty [:a {:class "influences"} "Influenced by: "] (interpose ", " (map #(->> (% languages) :name (lang-link %)) influences))))
 
 (defn influenced-entry [influenced languages]
-  (table-entry-when-not-empty [:a {:class "influenced" :href "#"} "Influenced: "] (interpose ", " (map #(->> (% languages) :name (lang-link %)) influenced))))
+  (table-entry-when-not-empty [:a {:class "influenced"} "Influenced: "] (interpose ", " (map #(->> (% languages) :name (lang-link %)) influenced))))
 
 (defn url-entry [url]
   (when url (table-entry [:a {:class "url" :href (str "http://en.wikipedia.org" url) :target "_blank"} "More info"] "")))
@@ -119,9 +119,9 @@
 
 (defn language-list [id langs]
   ; (select-langs (sort-by-name langs))
-  (on-channel sorted-langs select-langs)
-  (on-channel h/highlight-out highlight-langs)
-  (on-channel h/dehighlight-out dehighlight-langs)
+  (on-channel (tap-new sorted-langs) select-langs)
+  (on-channel (tap-new h/highlight-out) highlight-langs)
+  (on-channel (tap-new h/dehighlight-out) dehighlight-langs)
   (let [css-id (str "#" (name id))]
     (bind! css-id (unify (map #(vector % langs) @list-langs) lang-list-item))
     (let [clicks (dom/c2-listen css-id :click)

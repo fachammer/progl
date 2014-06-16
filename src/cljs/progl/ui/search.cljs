@@ -2,7 +2,7 @@
   (:require-macros [cljs.core.async.macros :as asyncm :refer [go-loop]])
   (:require [progl.dom :as dom]
             [progl.query :as q]
-            [progl.util :as util :refer [on-channel]]
+            [progl.util :as util :refer [on-channel tap-new throttle]]
             [progl.languages :as l]
             [progl.ui.select :as select]
             [cljs.core.async :as async :refer [pipe]]))
@@ -16,7 +16,9 @@
 (defn set-matches-text [matches]
   (-> (dom/element-by-id :matches) (dom/set-innerhtml! (matches-text (count matches)))))
 
+(def input-delay 350)
+
 (defn language-search [search-id langs]
-  (pipe (dom/listen-value (dom/element-by-id :search) "input") select/in)
-  (on-channel select/in-take set-search-input)
-  (on-channel select/out set-matches-text))
+  (pipe (throttle (dom/listen-value (dom/element-by-id :search) "input") input-delay) select/in)
+  (on-channel (tap-new select/in-take) set-search-input)
+  (on-channel (tap-new select/out) set-matches-text))

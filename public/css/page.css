@@ -34,6 +34,7 @@ h3 {
 
 a {
   color: black;
+  text-decoration: underline;
 }
 
 circle {
@@ -69,6 +70,10 @@ circle.sec-highlight {
 
 li.highlight{
   background-color: hsl(280, 20%, 90%);
+}
+
+.sec-highlight h3{
+  color: hsl(280, 50%, 80%);
 }
 
 .highlight h3 {

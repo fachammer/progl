@@ -5,7 +5,7 @@
             [progl.ui.select :as select]
             [progl.ui.highlighting :as h]
             [progl.dom :as dom]
-            [progl.util :refer [with-quotes on-channel]]
+            [progl.util :refer [with-quotes on-channel tap-new]]
             [c2.scale :as scale]
             [c2.maths :as math]
             [c2.core :refer [unify]]
@@ -100,15 +100,19 @@
 (defn year-grid [id]
   (bind! id (unify (range 1943 2015) year-grid-element)))
 
+(def connections-container-id :connections)
+
 (defn make-all-language-connections [langs]
-  (bind! "#connections"
+  (bind! (str "#" (name connections-container-id))
          (unify (map-indexed #(vector %1 %2 langs) (vec langs)) make-language-connections)))
 
+(def node-container-id :nodes)
+
 (defn lang-node [lang-key]
-  (dom/element-by-class js/document :node lang-key))
+  (dom/element-by-class (dom/element-by-id node-container-id) :node lang-key))
 
 (defn lang-connections [lang-key]
-  (dom/elements-by-class js/document :connection lang-key))
+  (dom/elements-by-class (dom/element-by-id connections-container-id) :connection lang-key))
 
 (defn apply-to-nodes [lang-keys f & args]
   (doseq [lk lang-keys]
@@ -135,15 +139,18 @@
 
 (defn mouseover->lang-key [[[_ [langk _]] _ _]] [langk])
 
+(defn css-id [s]
+  (str "#" (name s)))
+
 (defn make-all-language-nodes [langs]
-  (bind! "#nodes"
+  (bind! (css-id node-container-id)
          (unify (map-indexed vector (vec langs)) make-language-node))
-  (pipe (map< node-click->query (dom/c2-listen "#nodes" :click)) select/in)
-  (pipe (map< mouseover->lang-key (dom/c2-listen "#nodes" :mouseover)) h/highlight-in)
-  (pipe (map< mouseover->lang-key (dom/c2-listen "#nodes" :mouseout)) h/dehighlight-in)
-  (on-channel select/out select-nodes)
-  (on-channel h/highlight-out highlight-nodes)
-  (on-channel h/dehighlight-out dehighlight-nodes))
+  (pipe (map< node-click->query (dom/c2-listen (css-id node-container-id) :click)) select/in)
+  (pipe (map< mouseover->lang-key (dom/c2-listen (css-id node-container-id) :mouseover)) h/highlight-in)
+  (pipe (map< mouseover->lang-key (dom/c2-listen (css-id node-container-id) :mouseout)) h/dehighlight-in)
+  (on-channel (tap-new select/out) select-nodes)
+  (on-channel (tap-new h/highlight-out) highlight-nodes)
+  (on-channel (tap-new h/dehighlight-out) dehighlight-nodes))
 
 (defn make-all-language-lables [langs]
   (bind! "#lables"
@@ -151,8 +158,5 @@
 
 (defn language-graph [graph-id langs]
   (let [preproc-langs (preprocess-languages langs)]
-    ;(year-grid "#year-grid")
     (make-all-language-connections preproc-langs)
-    (make-all-language-nodes preproc-langs)
-    ;(make-all-language-lables preproc-langs)
-    ))
+    (make-all-language-nodes preproc-langs)))

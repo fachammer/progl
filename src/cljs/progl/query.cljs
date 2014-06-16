@@ -1,5 +1,6 @@
 (ns progl.query
-  (:require [clojure.string :as s]))
+  (:require [clojure.string :as s])
+  (:use [clojure.set :only [intersection]]))
 
 (defn lower-case [s]
   (.toLowerCase s))
@@ -18,7 +19,21 @@
 (def langs {:ksh {:influenced #{:windows-powershell :zsh}, :appearance-year 1984, :name "Korn Shell", :creators #{"David Korn"}, :influenced-by #{:sh}, :url "/wiki/Korn_shell"},
  :lua {:influenced #{:falcon :squirrel}, :appearance-year 1993, :name "Lua", :creators #{"PUC-Rio" "Roberto Ierusalimschy et al. at Tecgraf"}, :influenced-by #{:clu :snobol :cplusplus :modula :scheme}, :url "/wiki/Lua_(programming_language)"}})
 
+(declare single-query)
 
+(def union-query-separator ",")
+(declare union-query)
+
+(def intersection-query-separator " ")
+(declare intersection-query)
+
+(defn query [langs lang-query]
+  (if (= "" lang-query)
+    {}
+    (cond
+     (string-contains? lang-query union-query-separator) (union-query langs lang-query)
+     (string-contains? lang-query intersection-query-separator) (intersection-query langs lang-query)
+     :else (single-query langs lang-query))))
 
 (defn equal-name-pred [lang-query]
   (fn [lang#]
@@ -42,14 +57,35 @@
     (equal-name-pred lang-query)
     (contains-name-pred lang-query)))
 
-(def subquery-separator ",")
+(defn single-query [langs query]
+  (let [filter-pred? (lang-filter-pred query)]
+    (->> (filter filter-pred? langs)
+         (sort-by #(-> % val :name))
+         flatten
+         (apply hash-map))))
 
-(defn subqueries [lang-query]
-  (remove empty? (map s/trim (s/split lang-query (re-pattern subquery-separator)))))
+(defn union-subqueries [lang-query]
+  (->> (re-pattern union-query-separator)
+       (s/split lang-query)
+       (map s/trim)
+       (remove empty?)))
 
-(defn query [langs lang-query]
-  (if (= "" lang-query) {}
-    (if-not (string-contains? lang-query subquery-separator)
-      (let [filter-pred? (lang-filter-pred lang-query)]
-        (apply hash-map (flatten (sort-by #(-> % val :name) (filter filter-pred? langs)))))
-      (apply merge (map #(query langs %) (subqueries lang-query))))))
+(defn union-query [langs lang-query]
+  (->> (union-subqueries lang-query)
+       (map #(query langs %))
+       (apply merge)))
+
+(defn intersection-subqueries [query]
+  (->> (re-pattern intersection-query-separator)
+       (s/split query)
+       (map #(s/replace % #"\"" ""))
+       (map s/trim)
+       (remove empty?)))
+
+(defn intersection-query [langs lang-query]
+  (->> (intersection-subqueries lang-query)
+       (map #(->> (query langs %) keys (apply hash-set)))
+       (apply clojure.set/intersection)
+       (map (fn [k] [k (k langs)]))
+       flatten
+       (apply hash-map)))
