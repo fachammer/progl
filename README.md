@@ -12,3 +12,6 @@ TODO
 - fix bug: when clicking (selecting) on a node, the language should be highlighted, but insted only the node is highlighted
 - add feature: when ctrl-clicking or shift-clicking add language to selection
 - fix bug: throttle method puts something on the channel every interval
+- add feature: ancestor and descendant queries
+- add link to github
+- add contact form
