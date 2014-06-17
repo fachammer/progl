@@ -22,3 +22,13 @@
   (pipe (unique (throttle (dom/listen-value (dom/element-by-id :search) "input") input-delay)) select/in)
   (on-channel (tap-new select/in-take) set-search-input)
   (on-channel (tap-new select/out) set-matches-text))
+
+;(intersection-subqueries lang-query)
+;
+;       (apply clojure.set/intersection)
+;       (map (fn [k] [k (k langs)]))
+;       flatten
+;       (apply hash-map))
+
+
+(.log js/console (map #(->> (q/query l/languages %) keys (apply hash-set)) ["java" "c"]))

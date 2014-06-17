@@ -98,8 +98,8 @@
   (let [target (.-target evt)]
     (if (link? target)
       (case (attr target :class)
-        "influences" (s/join "," (map #(-> % langs :name with-quotes) influences))
-        "influenced" (s/join "," (map #(-> % langs :name with-quotes) influenced))
+        "influences" (str ">" (with-quotes lang-name))
+        "influenced" (str (with-quotes lang-name) "<")
         "year" (with-quotes year)
         "url" (.-value (dom/element-by-id :search))
         (with-quotes (.-innerHTML target)))

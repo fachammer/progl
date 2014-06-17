@@ -16,22 +16,32 @@
     true
     false))
 
-(declare single-query)
+(declare query)
 
-(def union-query-separator ",")
-(declare union-query)
+(def influences-operator ">")
+(def influenced-operator "<")
 
-(def intersection-query-separator " ")
-(declare intersection-query)
+(defn influences-query [langs lang-query]
+  (->> (-> lang-query
+           (s/replace (re-pattern influences-operator) "")
+           (s/replace (re-pattern influenced-operator) ""))
+       (query langs)
+       (map #(-> % val :influenced-by))
+       (reduce into)
+       (map (fn [k] [k (k langs)]))
+       flatten
+       (apply hash-map)))
 
-(defn query [langs lang-query]
-  (if (= "" lang-query)
-    {}
-    (cond
-     (and (string-starts-with? lang-query "\"") (string-ends-with? lang-query "\"") (not (string-contains? lang-query union-query-separator))) (single-query langs lang-query)
-     (string-contains? lang-query union-query-separator) (union-query langs lang-query)
-     (string-contains? lang-query intersection-query-separator) (intersection-query langs lang-query)
-     :else (single-query langs lang-query))))
+(defn influenced-query [langs lang-query]
+  (->> (-> lang-query
+           (s/replace (re-pattern influences-operator) "")
+           (s/replace (re-pattern influenced-operator) ""))
+       (query langs)
+       (map #(-> % val :influenced))
+       (reduce into)
+       (map (fn [k] [k (k langs)]))
+       flatten
+       (apply hash-map)))
 
 (defn equal-name-pred [lang-query]
   (fn [lang#]
@@ -55,16 +65,27 @@
     (equal-name-pred lang-query)
     (contains-name-pred lang-query)))
 
-(defn single-query [langs query]
-  (let [filter-pred? (lang-filter-pred query)]
-    (->> (filter filter-pred? langs)
-         (sort-by #(-> % val :name))
-         flatten
-         (apply hash-map))))
+(defn single-query [langs lang-query]
+  (cond
+   (string-starts-with? lang-query influences-operator)
+     (let [influences (influences-query langs lang-query)]
+        (if (string-ends-with? lang-query influenced-operator)
+          (merge influences (influenced-query langs lang-query))
+          influences))
+   (string-ends-with? lang-query influenced-operator)
+     (influenced-query langs lang-query)
+   :else
+     (let [filter-pred? (lang-filter-pred lang-query)]
+      (->> (filter filter-pred? langs)
+           (sort-by #(-> % val :name))
+           flatten
+           (apply hash-map)))))
+
+(def union-query-separator ",")
 
 (defn union-subqueries [lang-query]
-  (->> (re-pattern union-query-separator)
-       (s/split lang-query)
+  (->> (re-seq (re-pattern (str "[^" union-query-separator "\"]+|\"[^\"]*\"")) lang-query)
+       (map #(s/replace % #"\"" ""))
        (map s/trim)
        (remove empty?)))
 
@@ -73,9 +94,10 @@
        (map #(query langs %))
        (apply merge)))
 
-(defn intersection-subqueries [query]
-  (->> (re-pattern intersection-query-separator)
-       (s/split query)
+(def intersection-query-separator " ")
+
+(defn intersection-subqueries [lang-query]
+  (->> (re-seq (re-pattern (str "[^" intersection-query-separator "\"]+|\"[^\"]*\"")) lang-query)
        (map #(s/replace % #"\"" ""))
        (map s/trim)
        (remove empty?)))
@@ -87,3 +109,13 @@
        (map (fn [k] [k (k langs)]))
        flatten
        (apply hash-map)))
+
+(defn query [langs lang-query]
+  (if (= "" lang-query)
+    {}
+    (if-let [union-queries (union-subqueries lang-query)]
+      (union-query langs lang-query)
+      (if-let [intersection-queries (intersection-subqueries lang-query)]
+        (intersection-query langs lang-query)
+        (single-query langs lang-query)))))
+
